@@ -1045,16 +1045,21 @@ function fmtDateInput(iso) {
 async function init() {
   showLoading(true);
   try {
-    const data = await callServer('getInitialData');
-    STATE.wallets = data.wallets;
-    STATE.categories = data.categories;
-    STATE.periods = data.periods;
+    // ยิง 2 คำขอพร้อมกัน (ขนาน) แทนที่จะรอทีละอัน ช่วยลดเวลาโหลดหน้าแรกลงได้มาก
+    const [initialData, dashboardData] = await Promise.all([
+      callServer('getInitialData'),
+      callServer('getDashboardData', null)
+    ]);
+    STATE.wallets = initialData.wallets;
+    STATE.categories = initialData.categories;
+    STATE.periods = initialData.periods;
     const active = STATE.periods.find(p => p.status === 'active') || STATE.periods[0];
-    STATE.currentPeriodId = active ? active.id : null;
+    STATE.currentPeriodId = dashboardData.currentPeriod ? dashboardData.currentPeriod.id : (active ? active.id : null);
 
     bindNav();
     bindGlobalHandlers();
-    await refreshDashboard();
+    renderPeriodSelect();
+    applyDashboardData(dashboardData);
   } catch (e) {
     showToast('เกิดข้อผิดพลาด: ' + (e.message || e));
   } finally {
@@ -1131,24 +1136,27 @@ async function refreshDashboard() {
   showLoading(true);
   try {
     const data = await callServer('getDashboardData', STATE.currentPeriodId);
-    if (data.currentPeriod) {
-      STATE.currentPeriodId = data.currentPeriod.id;
-      document.getElementById('periodSelect').value = data.currentPeriod.id;
-    }
-    document.getElementById('totalBalanceText').textContent = fmtMoney(data.totalBalance);
-    renderWalletStrip(data.walletBalances);
-    document.getElementById('statIncome').textContent = '฿' + fmtMoney(data.totalIncome);
-    document.getElementById('statExpense').textContent = '฿' + fmtMoney(data.totalExpense);
-    renderDonut(data.donutData, data.totalExpense);
-    renderRecentTx(data.recentTx);
-
-    const breakdown = await callServer('getWalletCategoryBreakdown', STATE.currentPeriodId);
-    renderWalletBreakdown(breakdown);
+    applyDashboardData(data);
   } catch (e) {
     showToast('โหลดข้อมูลไม่สำเร็จ: ' + (e.message || e));
   } finally {
     showLoading(false);
   }
+}
+
+function applyDashboardData(data) {
+  if (data.currentPeriod) {
+    STATE.currentPeriodId = data.currentPeriod.id;
+    const sel = document.getElementById('periodSelect');
+    if (sel) sel.value = data.currentPeriod.id;
+  }
+  document.getElementById('totalBalanceText').textContent = fmtMoney(data.totalBalance);
+  renderWalletStrip(data.walletBalances);
+  document.getElementById('statIncome').textContent = '฿' + fmtMoney(data.totalIncome);
+  document.getElementById('statExpense').textContent = '฿' + fmtMoney(data.totalExpense);
+  renderDonut(data.donutData, data.totalExpense);
+  renderRecentTx(data.recentTx);
+  renderWalletBreakdown(data.walletBreakdown);
 }
 
 function renderWalletBreakdown(breakdown) {
