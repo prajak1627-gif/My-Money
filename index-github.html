@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+
+  <!-- ตั้งค่าให้ติดตั้งเป็นแอปบนหน้าจอหลักมือถือได้ (Add to Home Screen) -->
+  <title>บันทึกรายรับ-รายจ่าย</title>
+  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIuC4muC4seC4meC4l+C4tuC4geC4o+C4suC4ouC4o+C4seC4mi3guKPguLLguKLguIjguYjguLLguKIiLCAic2hvcnRfbmFtZSI6ICLguJrguLHguJnguJfguLbguIHguYDguIfguLTguJkiLCAic3RhcnRfdXJsIjogIi4iLCAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwgImJhY2tncm91bmRfY29sb3IiOiAiI0VFRjJFRSIsICJ0aGVtZV9jb2xvciI6ICIjMTYzMDJBIiwgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwgImljb25zIjogW3sic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBZ0FBQUFJQUNBWUFBQUQwZU5UNkFBQUwxa2xFUVZSNDJ1M2NNVzRVV1JTRzBhNG5yOEViSUhQa2JORE1YcEFjc0NvQ0pPOWxFR1NPbkxFQmI4SWtXTElRZHJmZDFWM3YzditjbUdGdzRYcjNxMXVObHgxVHVyeStlblFWZ0E0ZTd1NFhWMkUrL2xJTWVBQ0JJQUF3N0FGRWdRREF3QWNRQkFJQUF4OUFFQWdBUXg4QU1TQUFESDBBeElBQU1QUUJFQU1Dd09BSFFBZ0lBRU1mQURFZ0FBeCtBSVNBQURENEFSQUNBc0RnQjBBSUNBQ0RId0FoSUFBTWZnQ0V3RnNOd3g4QThtYkg0aThQQVBLMkFlMitLSU1mQUNHd1g2dFhBSVkvQUdaTTBBYkE0QWZBTmlCc0EyRDRBMkQyaEFXQTRRK0FHZlEraTRzT0FNZXArRXFnM0FiQThBZkFiQW9MQU1NZkFETnFIWXVMQ2dEcnF2QktZUG9OZ09FUGdHMUFXQUFZL2dDSWdMQUFNUHdCRUFGaEFXRDRBeUFDd2dMQThBZEFCSVFGZ09FUGdBZ0lDd0RESHdBUkVCWUFoajhBSWlBc0FBeC9BRVJBV0FBWS9nQ0lnTEFBTVB3QkVBSGJ6Y0tSOWdVRGdBallJQUFNZndEWWZqYU83bDhnQUlpQURRUEE4QWVBZVdibDZQWUZBWUFJbUdnREFBRE00K1FCNE9rZkFPYWJuYVA2RndBQUltQ2lBREQ4QVdEZVdlb3pBQUFRNkNRQjRPa2ZBT2FlcWFQS0h4UUFSTUNrQVdENEEwQ05DUEFaQUFBSXRGb0FlUG9IZ0RwYmdESGJId2dBT1AzTTlRb0FBQUlkSFFDZS9nR2czaGJBQmdBQWJBQTgvUU5Bd2haZ2JQVS9CZ0MyaXdDdkFBQWcwTHNDd05NL0FOVGVBdGdBQUlBTmdLZC9BRWpZQXRnQUFJQU5nS2QvQUVqWUF0Z0FBSUFOZ0tkL0FFallBdGdBQUlBTmdLZC9BRWpZQXRnQUFJQU5BQUFnQUhiVy93QlF6U0d6MndZQUFHd0FQUDBEUU1JV3dBWUFBR3dBQUlEb0FMRCtCNERhWHB2bE5nQUFZQU1BQU1RR2dQVS9BUFR3MGt5M0FRQUFHd0FBSURJQXJQOEJvSmUvelhZYkFBQ3dBUUFBQkFBQTBEOEF2UDhIZ0o3K25QRTJBQUNRdmdFQUFBUUFBTkE5QUx6L0I0RGVuczk2R3dBQVNONEFBQUFDQUFBUUFBQkF1d0R3QVVBQXlQQTA4MjBBQUNCMUF3QUFDQUFBUUFBQUFBSUFBQkFBQUlBQUFBQUtXUHdNQUFDd0FRQUFCQUFBSUFBQUFBRUFBQWdBQUVBQUFBQUNBQUFRQUFDQUFBQUF6dWpDSmNod2U3TzRDTURCUG4zMVEySzc4Nk9BRFh3QVFTQUFNUGdCaElBQXdOQUhFQU10K1JDZzRRL2cvTEVCd0kwSFlCdGdBNERoRCtCY0VnQzR5UUNjVHdJQU54ZUFjMG9BNEtZQ2NGNEpBTnhNZ0hNTEFZQ2JDSEIrSVFCdzh3RE9NUVFBYmhyQWVZWUFBQUFFZ0ZvR2NLNGhBTndrQU00M0JBQUFJQUFBQUFGUWlmVVk0SnhEQUFBQUFrQVZBemp2RUFBQWdBQUFBQVFBQUNBQVp1ZDlHT0RjUXdBQUFBSUFBQkFBQUlBQUFBQUVBQUFnQUFBQUFRQUFDQUFBRUFBQWdBQUFBQVFBQUNBQUFBQUJBQUFJQUFCQUFBQUFBZ0FBRUFBQWdBQUFBTTdod2lXQURKKytQaDc4YTI5dkZoY01CQURRZmVEdisyOEZBUWdBb1BIZzMvZDdDZ0VRQUVEQTRCY0NJQUNBNE1FdkJLQWYvd29BRFAreS8zOUFBSURoTHdLQU4vQUtBQXorMWY1TVhnbUFEUUFRK0xSdEd3QUNnQVA5L1BiRFJhRFZjQlVCT1A4RUFMNzVBWnlEQWdEZjlLUThWZHNDNER3VUFQaG1KM1NZaWdDY2l3SUFDQjJpSWdBRUFDb1h3UGtvQUh4elE4clRzeTBBenNrNStVRkFFT2ExSDlaaldJTU5BS3FXWmsvTnR6ZkwzcC9VZDhpdnNRWEFlV2tEQUJSLzR0LzMzeGpjWUFNQUZIejZQL1pwZnMxdGdKZ0FBUkRIT29zcVQvNm5qZ0J3YmdvQW9NRHdGd0VnQUZDeEFNNVBBUUNjd2hydnlVLzF0TDdHNyt0ekFDQUFBQUFCQU16eWxMN2w3dzhJQUFCQUFOVGtBeXdBemxFQkFBQUlBQUJBQUFBQUFnQUFFQURBUVU3OWczYjhJQjhRQUFDQUFBRFdNUE9QMjUzNXh4UURBZ0FBRUFDUWFlMHRnSGYvSUFDQXNBZ3cvRUVBQUdldzVudnlZNGYzbXNQZiszK1l5NFZMQUJtYmdMY01ZRS85WUFNQUZOOENQQi9xK3diN0liL0cwei9ZQUFDRk53S0FEUUFRc2dYd2RRQUNBQUFFQU9EcDJaOGZCQUJnaUJyK0lBQUF3OVR3QndFQUFBZ0F3Rk8xcDM4UUFFRHNjRFg4b1E0L0NBaUtSc0JNUDlESDRBY2JBQ0JzNkJyK0lBQ0FzT0ZyK0VOZFhnRkFrd2c0NXlzQmd4OEVBQkFVQWdZL0NBQWdLQVFNZmhBQVFMRVFlUEtXSUREd1FRQUFUWU1BeU9aZkFRQ0FBQUFBQkFBQUlBQUFBQUVBQUFnQUFFQUFBQUFDQUFBUUFBQ0FBQUFBQkFBQUlBQUFBQUVBQUFnQUFFQUFBQUFDQUFBUUFBQ0FBQUFBQWNCRy92djgzVVVBbkhzSUFBQkFBQUFBQWdBQUVBQk5lQjhHT084UUFBQ0FBRkRGQU00NUJBQUFJQUFBQUFGUW5QVVk0SHhEQUxoSkFKeHJDQUFBUUFDb1pRRG5HUUxBVFFQZ0hFTUF1SGtBbkY4SUFEY1JnSE1MQWVCbUFuQmVDUURjVkFET0tRR0Ftd3ZBK1NRQWNKTUJPSmU2dVhBSmF0OXMvMy81NkdJQUJqODJBRzQrQU9jUE5nQnhONkdOQUdEb0l3Q0NiMDRoQUJqOENBQTNxeUFBREh3RWdKc1pnSFErQkFnQUFnQUFFQUFBZ0FBQUFBUUFBQ0FBQUFBQkFBQUlBQUJBQUFBQUFnQUFFQUFBZ0FBQUFBUUFBQ0FBQUFBQkFBQUlBQUJBQUFBQUFnQUFCQUFBSUFBQUFBRUFBQWdBQUVBQUFBQUNBQUFRQUFDQUFBQUFCQUFBSUFBQUFBRUFBQWdBQUVBQUFBQUNBQUFRQUFDQUFBQUFCQUFBQ0FBQVFBQUFBQUlBQUJBQUFJQUFBQUFFQUFBZ0FBQUFBUUFBQ0FBQVFBQUFBQUlBQUJBQUFJQUFBQUFFQUFBZ0FBQUFBUUFBQ0FBQUVBQUFnQUFBQUFRQUFDQUFBQUFCQUFBSUFBQkFBQUFBQWdBQUVBQUFnQUFBQUFRQUFDQUFBQUFCQUFBSUFBQkFBQUFBQWdBQUVBQUFJQUFBQUFFQUFBZ0FBRUFBQUFBQ0FBQVFBQUNBQUFBQUJBQUFJQUFBQUFFQUFBZ0FBRUFBQUFBQ0FBQVFBQUNBQUFBQUJBQUFJQUFBQUFFQUFBSUFBQkFBQUlBQUFBQUVBQUFnQUFBQUFRQUFDQUFBUUFBQUFBSUFBQkFBQUlBQUFBQUVBQUFnQUFBQUFRQUFDQUFBUUFBQUFBSUFBQVFBQUNBQUFBQUJBQUFJQUFCQUFBQUFBZ0FBRUFBQWdBQUFBQVFBQUNBQUFBQUJBQUFJQUFCQUFBQUFBZ0FBRUFBQWdBQUFBQVFBQUFnQUFFQUFzSUlQLy83aklnQTRSd1VBQUNBQUFBQUJBQUFJQUFCQUFGVGxBeXdBems4QkFBQUlBQlVMZ0hOVEFBQUFBZ0FBRUFERldXY0JPQzhGQUFBZ0FGUXRBTTVKQWVDYkc4RDVpQUFBQUFTQXlnVndMaUlBZkxNRE9BOFJBTDdwQVp5RENBRGYvQURPUHdTQW13REF1WWNBY0RNQU9POEVBRzRLQU9lY0FNRE5BZUI4RXdDNFNRQ2NhNDBzbDlkWGp5N0R2SDUrKytFaUFBWS9OZ0J1SGdEbkZ6WUF0Z0VBQmo4Q1FBd0FHUG9JQUNFQVlQQWpBRVFCZ0dIUDd3RFk3WFk3RVFBQU9SN3U3aGYvQ2dBQUFna0FBQkFBQUlBQUFBQUVBQUFnQUFBQUFRQUFsQXFBaDd2N3hhVUFnUDZlWnI0TkFBQ2tiZ0FBQUFFQUFBZ0FBS0J0QVBnZ0lBRDA5bnpXMndBQVFQSUdBQUFRQUFCQVNnRDRIQUFBOVBUbmpMY0JBSUQwRFFBQUlBQUFnSlFBOERrQUFPamxiN1BkQmdBQWJBQUFnTmdBOEJvQUFIcDRhYWJiQUFDQURRQUFFQjBBWGdNQVFHMnZ6WEliQUFDd0FRQUE0Z1BBYXdBQXFHbmZETGNCQUFBYkFGc0FBT2orOUc4REFBQTJBQUNBQUhqR2F3QUFxT0hRbVcwREFBQTJBTFlBQU5EOTZkOEdBQUJzQUd3QkFDRGg2ZDhHQUFCc0FHd0JBQ0RoNmQ4R0FBQnNBR3dCQUNEaDZkOEdBQUJzQUd3QkFDRGg2Zi9vRFlBSUFJQjZ3Ly9vQUFBQWFqbzZBR3dCQUtEVzA3OE5BQURZQU5nQ0FFREMwLytxR3dBUkFBQTFoditxQVFBQTFMRnFBTmdDQU1EOFQvOG4yUUNJQUFDWWY3YU9LbjlRQUREOEp3OEFBR0J1SndzQVd3QUFtSGVXanFwL2NBQXcvQ2NOQUJFQUFIUE9UcDhCQUlCQVp3a0FXd0FBbUd0bWptNWZFQUFZL2hNRmdBZ0FnSGxtNU9qK0JRS0E0VDlCQUlnQUFOaCtKbzYwTHhnQTBvZi9wZ0VnQWdBdy9MY3owaThBQUNUT3Z1RkNBRURlekJzdUNBRGt6YnJod2dCQTNvd2JMaEFBNU0yMjRVSUJRTjVNR3k0WUFPVE5zdUhDQVVEZURCc3VJQURremE1U3cvWHkrdXJSdHhVQUJuL0FCc0EyQUFBektqd0FSQUFBWnRNNlNnOVRyd1FBTVBoRE5nQzJBUUNZUWVFQklBSUFNSHZlcDlYdzlFb0FBSU0vWkFOZ0d3Q0FHUk8rQWJBTkFNRGdEdzhBSVFDQXdmK3k0UzhRQVBKbVI5Und0QTBBd0VOallBQUlBUURTQjM5MEFBZ0JBRklIdndBUUFnQUdmekFCSUFRQURINEJnQmdBTVBRRkFFSUF3T0FYQUdKQURBQVkrZ0pBREFCZzZBc0FNUUNBb1M4QUJBRUFCcjRBRUFRQUdQZ0NRQlNJQWdERFhnQWdFQUFEbm5QNkJWZVFoVVkxR3lHTUFBQUFBRWxGVGtTdVFtQ0MiLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogImFueSJ9LCB7InNyYyI6ICJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQWdBQUFBSUFDQVlBQUFEMGVOVDZBQUFMMWtsRVFWUjQydTNjTVc0VVdSU0cwYTRucjhFYklIUGtiTkRNWHBBY3NDb0NKTzlsRUdTT25MRUJiOElrV0xJUWRyZmQxVjN2M3YrY21HRnc0WHIzcTF1Tmx4MVR1cnkrZW5RVmdBNGU3dTRYVjJFKy9sSU1lQUNCSUFBdzdBRkVnUURBd0FjUUJBSUFBeDlBRUFnQVF4OEFNU0FBREgwQXhJQUFNUFFCRUFNQ3dPQUhRQWdJQUVNZkFERWdBQXgrQUlTQUFERDRBUkFDQXNEZ0IwQUlDQUNESHdBaElBQU1mZ0NFd0ZzTnd4OEE4bWJINGk4UEFQSzJBZTIrS0lNZkFDR3dYNnRYQUlZL0FHWk0wQWJBNEFmQU5pQnNBMkQ0QTJEMmhBV0E0UStBR2ZRK2k0c09BTWVwK0VxZzNBYkE4QWZBYkFvTEFNTWZBRE5xSFl1TENnRHJxdkJLWVBvTmdPRVBnRzFBV0FBWS9nQ0lnTEFBTVB3QkVBRmhBV0Q0QXlBQ3dnTEE4QWRBQklRRmdPRVBnQWdJQ3dEREh3QVJFQllBaGo4QUlpQXNBQXgvQUVSQVdBQVkvZ0NJZ0xBQU1Qd0JFQUhiemNLUjlnVURnQWpZSUFBTWZ3RFlmamFPN2w4Z0FJaUFEUVBBOEFlQWVXYmw2UFlGQVlBSW1HZ0RBQURNNCtRQjRPa2ZBT2FibmFQNkZ3QUFJbUNpQUREOEFXRGVXZW96QUFBUTZDUUI0T2tmQU9hZXFhUEtIeFFBUk1Da0FXRDRBMENOQ1BBWkFBQUl0Rm9BZVBvSGdEcGJnREhiSHdnQU9QM005UW9BQUFJZEhRQ2UvZ0dnM2hiQUJnQUFiQUE4L1FOQXdoWmdiUFUvQmdDMml3Q3ZBQUFnMExzQ3dOTS9BTlRlQXRnQUFJQU5nS2QvQUVqWUF0Z0FBSUFOZ0tkL0FFallBdGdBQUlBTmdLZC9BRWpZQXRnQUFJQU5nS2QvQUVqWUF0Z0FBSUFOQUFBZ0FIYlcvd0JRelNHejJ3WUFBR3dBUFAwRFFNSVd3QVlBQUd3QUFJRG9BTEQrQjREYVhwdmxOZ0FBWUFNQUFNUUdnUFUvQVBUdzBreTNBUUFBR3dBQUlESUFyUDhCb0plL3pYWWJBQUN3QVFBQUJBQUEwRDhBdlA4SGdKNytuUEUyQUFDUXZnRUFBQVFBQU5BOUFMei9CNERlbnM5Nkd3QUFTTjRBQUFBQ0FBQVFBQUJBdXdEd0FVQUF5UEEwODIwQUFDQjFBd0FBQ0FBQVFBQUFBQUlBQUJBQUFJQUFBQUFLV1B3TUFBQ3dBUUFBQkFBQUlBQUFBQUVBQUFnQUFFQUFBQUFDQUFBUUFBQ0FBQUFBenVqQ0pjaHdlN080Q01EQlBuMzFRMks3ODZPQURYd0FRU0FBTVBnQmhJQUF3TkFIRUFNdCtSQ2c0US9nL0xFQndJMEhZQnRnQTREaEQrQmNFZ0M0eVFDY1R3SUFOeGVBYzBvQTRLWUNjRjRKQU54TWdITUxBWUNiQ0hCK0lRQnc4d0RPTVFRQWJockFlWVlBQUFBRWdGb0djSzRoQU53a0FNNDNCQUFBSUFBQUFBRlFpZlVZNEp4REFBQUFBa0FWQXpqdkVBQUFnQUFBQUFRQUFDQUFadWQ5R09EY1F3QUFBQUlBQUJBQUFJQUFBQUFFQUFBZ0FBQUFBUUFBQ0FBQUVBQUFnQUFBQUFRQUFDQUFBQUFCQUFBSUFBQkFBQUFBQWdBQUVBQUFnQUFBQU03aHdpV0FESisrUGg3OGEyOXZGaGNNQkFEUWZlRHYrMjhGQVFnQW9QSGczL2Q3Q2dFUUFFREE0QmNDSUFDQTRNRXZCS0FmL3dvQURQK3kvMzlBQUlEaEx3S0FOL0FLQUF6KzFmNU1YZ21BRFFBUStMUnRHd0FDZ0FQOS9QYkRSYURWY0JVQk9QOEVBTDc1QVp5REFnRGY5S1E4VmRzQzREd1VBUGhtSjNTWWlnQ2Npd0lBQ0IyaUlnQUVBQ29Yd1Brb0FIeHpROHJUc3kwQXpzazUrVUZBRU9hMUg5WmpXSU1OQUtxV1prL050emZMM3AvVWQ4aXZzUVhBZVdrREFCUi80dC8zM3hqY1lBTUFGSHo2UC9acGZzMXRnSmdBQVJESE9vc3FULzZuamdCd2Jnb0FvTUR3RndFZ0FGQ3hBTTVQQVFDY3docnZ5VS8xdEw3RzcrdHpBQ0FBQUFBQkFNenlsTDdsN3c4SUFBQkFBTlRrQXl3QXpsRUJBQUFJQUFCQUFBQUFBZ0FBRUFEQVFVNzlnM2I4SUI4UUFBQ0FBQURXTVBPUDI1MzV4eFFEQWdBQUVBQ1FhZTB0Z0hmL0lBQ0FzQWd3L0VFQUFHZXc1bnZ5WTRmM21zUGYrMytZeTRWTEFCbWJnTGNNWUUvOVlBTUFGTjhDUEIvcSt3YjdJYi9HMHovWUFBQ0ZOd0tBRFFBUXNnWHdkUUFDQUFBRUFPRHAyWjhmQkFCZ2lCcitJQUFBdzlUd0J3RUFBQWdBd0ZPMXAzOFFBRURzY0RYOG9RNC9DQWlLUnNCTVA5REg0QWNiQUNCczZCcitJQUNBc09GcitFTmRYZ0ZBa3dnNDV5c0JneDhFQUJBVUFnWS9DQUFnS0FRTWZoQUFRTEVRZVBLV0lERHdRUUFBVFlNQXlPWmZBUUNBQUFBQUJBQUFJQUFBQUFFQUFBZ0FBRUFBQUFBQ0FBQVFBQUNBQUFBQUJBQUFJQUFBQUFFQUFBZ0FBRUFBQUFBQ0FBQVFBQUNBQUFBQUFjQkcvdnY4M1VVQW5Ic0lBQUJBQUFBQUFnQUFFQUJOZUI4R09POFFBQUNBQUZERkFNNDVCQUFBSUFBQUFBRlFuUFVZNEh4REFMaEpBSnhyQ0FBQVFBQ29aUURuR1FMQVRRUGdIRU1BdUhrQW5GOElBRGNSZ0hNTEFlQm1BbkJlQ1FEY1ZBRE9LUUdBbXd2QStTUUFjSk1CT0plNnVYQUphdDlzLzMvNTZHSUFCajgyQUc0K0FPY1BOZ0J4TjZHTkFHRG9Jd0NDYjA0aEFCajhDQUEzcXlBQURId0VnSnNaZ0hRK0JBZ0FBZ0FBRUFBQWdBQUFBQVFBQUNBQUFBQUJBQUFJQUFCQUFBQUFBZ0FBRUFBQWdBQUFBQVFBQUNBQUFBQUJBQUFJQUFCQUFBQUFBZ0FBQkFBQUlBQUFBQUVBQUFnQUFFQUFBQUFDQUFBUUFBQ0FBQUFBQkFBQUlBQUFBQUVBQUFnQUFFQUFBQUFDQUFBUUFBQ0FBQUFBQkFBQUNBQUFRQUFBQUFJQUFCQUFBSUFBQUFBRUFBQWdBQUFBQVFBQUNBQUFRQUFBQUFJQUFCQUFBSUFBQUFBRUFBQWdBQUFBQVFBQUNBQUFFQUFBZ0FBQUFBUUFBQ0FBQUFBQkFBQUlBQUJBQUFBQUFnQUFFQUFBZ0FBQUFBUUFBQ0FBQUFBQkFBQUlBQUJBQUFBQUFnQUFFQUFBSUFBQUFBRUFBQWdBQUVBQUFBQUNBQUFRQUFDQUFBQUFCQUFBSUFBQUFBRUFBQWdBQUVBQUFBQUNBQUFRQUFDQUFBQUFCQUFBSUFBQUFBRUFBQUlBQUJBQUFJQUFBQUFFQUFBZ0FBQUFBUUFBQ0FBQVFBQUFBQUlBQUJBQUFJQUFBQUFFQUFBZ0FBQUFBUUFBQ0FBQVFBQUFBQUlBQUFRQUFDQUFBQUFCQUFBSUFBQkFBQUFBQWdBQUVBQUFnQUFBQUFRQUFDQUFBQUFCQUFBSUFBQkFBQUFBQWdBQUVBQUFnQUFBQUFRQUFBZ0FBRUFBc0lJUC8vN2pJZ0E0UndVQUFDQUFBQUFCQUFBSUFBQkFBRlRsQXl3QXprOEJBQUFJQUJVTGdITlRBQUFBQWdBQUVBREZXV2NCT0M4RkFBQWdBRlF0QU01SkFlQ2JHOEQ1aUFBQUFBU0F5Z1Z3TGlJQWZMTURPQThSQUw3cEFaeURDQURmL0FET1B3U0Ftd0RBdVljQWNETUFPTzhFQUc0S0FPZWNBTUROQWVCOEV3QzRTUUNjYTQwc2w5ZFhqeTdEdkg1KysrRWlBQVkvTmdCdUhnRG5GellBdGdFQUJqOENRQXdBR1BvSUFDRUFZUEFqQUVRQmdHSFA3d0RZN1hZN0VRQUFPUjd1N2hmL0NnQUFBZ2tBQUJBQUFJQUFBQUFFQUFBZ0FBQUFBUUFBbEFxQWg3djd4YVVBZ1A2ZVpyNE5BQUNrYmdBQUFBRUFBQWdBQUtCdEFQZ2dJQUQwOW56VzJ3QUFRUElHQUFBUUFBQkFTZ0Q0SEFBQTlQVG5qTGNCQUlEMERRQUFJQUFBZ0pRQThEa0FBT2psYjdQZEJnQUFiQUFBZ05nQThCb0FBSHA0YWFiYkFBQ0FEUUFBRUIwQVhnTUFRRzJ2elhJYkFBQ3dBUUFBNGdQQWF3QUFxR25mRExjQkFBQWJBRnNBQU9qKzlHOERBQUEyQUFDQUFIakdhd0FBcU9IUW1XMERBQUEyQUxZQUFORDk2ZDhHQUFCc0FHd0JBQ0RoNmQ4R0FBQnNBR3dCQUNEaDZkOEdBQUJzQUd3QkFDRGg2ZDhHQUFCc0FHd0JBQ0RoNmYvb0RZQUlBSUI2dy8vb0FBQUFham82QUd3QkFLRFcwNzhOQUFEWUFOZ0NBRURDMC8rcUd3QVJBQUExaHYrcUFRQUExTEZxQU5nQ0FNRDhULzhuMlFDSUFBQ1lmN2FPS245UUFERDhKdzhBQUdCdUp3c0FXd0FBbUhlV2pxcC9jQUF3L0NjTkFCRUFBSFBPVHA4QkFJQkFad2tBV3dBQW1HdG1qbTVmRUFBWS9oTUZnQWdBZ0hsbTVPaitCUUtBNFQ5QkFJZ0FBTmgrSm82MEx4Z0Ewb2YvcGdFZ0FnQXcvTGN6MGk4QUFDVE92dUZDQUVEZXpCc3VDQURremJyaHdnQkEzb3diTGhBQTVNMjI0VUlCUU41TUd5NFlBT1ROc3VIQ0FVRGVEQnN1SUFEa3phNVN3L1h5K3VyUnR4VUFCbi9BQnNBMkFBQXpLandBUkFBQVp0TTZTZzlUcndRQU1QaEROZ0MyQVFDWVFlRUJJQUlBTUh2ZXA5WHc5RW9BQUlNL1pBTmdHd0NBR1JPK0FiQU5BTURnRHc4QUlRQ0F3Zit5NFM4UUFQSm1SOVJ3dEEwQXdFTmpZQUFJQVFEU0IzOTBBQWdCQUZJSHZ3QVFBZ0FHZnpBQklBUUFESDRCZ0JnQU1QUUZBRUlBd09BWEFHSkFEQUFZK2dKQURBQmc2QXNBTVFDQW9TOEFCQUVBQnI0QUVBUUFHUGdDUUJTSUFnRERYZ0FnRUFBRG5uUDZCVmVRaFVZMUd5R01BQUFBQUVsRlRrU3VRbUNDIiwgInNpemVzIjogIjUxMng1MTIiLCAidHlwZSI6ICJpbWFnZS9wbmciLCAicHVycG9zZSI6ICJtYXNrYWJsZSJ9XX0=">
+  <link rel="icon" type="image/png" sizes="512x512" href="data:image/png;base64,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">
+  <link rel="apple-touch-icon" href="data:image/png;base64,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">
+  <meta name="theme-color" content="#16302A">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="บันทึกเงิน">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #EEF2EE;
+    --paper: #FFFFFF;
+    --ink: #16302A;
+    --ink-soft: #4C5D57;
+    --line: #DDE5DD;
+    --gold: #B8912B;
+    --gold-soft: #F1E6C8;
+    --income: #2F7A56;
+    --income-soft: #E4F1E9;
+    --expense: #B44B36;
+    --expense-soft: #F7E7E2;
+    --radius-s: 10px;
+    --radius-m: 16px;
+    --radius-l: 22px;
+    --shadow: 0 1px 2px rgba(22,48,42,0.06), 0 8px 24px rgba(22,48,42,0.06);
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  #app {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--bg);
+    position: relative;
+    padding-bottom: 88px;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 600;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  button { font-family: inherit; }
+
+  /* ---------- Header ---------- */
+  .app-header {
+    padding: 20px 20px 16px;
+    background: linear-gradient(180deg, #16302A 0%, #1D3D34 100%);
+    color: #F3F6F3;
+    border-radius: 0 0 28px 28px;
+  }
+  .app-header .eyebrow {
+    font-size: 13px;
+    color: #A9C4B9;
+    margin-bottom: 2px;
+  }
+  .app-header .total-label {
+    font-size: 13px;
+    color: #A9C4B9;
+    margin-top: 10px;
+  }
+  .app-header .total-amount {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    margin-top: 2px;
+    color: #FFFFFF;
+  }
+  .app-header .total-amount .thb { font-size: 20px; font-weight: 500; color: #CFE3D9; margin-right: 2px;}
+
+  .wallet-strip {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-top: 16px;
+    padding-bottom: 4px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .wallet-strip::-webkit-scrollbar { display: none; }
+  .wallet-chip {
+    flex: 0 0 auto;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: var(--radius-m);
+    padding: 10px 14px;
+    min-width: 128px;
+  }
+  .wallet-chip .wc-name { font-size: 12px; color: #BFD6CC; display:flex; align-items:center; gap:6px;}
+  .wallet-chip .wc-balance { font-family: 'Noto Serif Thai', serif; font-size: 17px; font-weight: 600; margin-top: 4px; color: #FFFFFF;}
+
+  /* ---------- Sections ---------- */
+  .section { padding: 18px 20px 0; }
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-title .link-btn {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gold);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .period-select-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 14px 20px 0;
+  }
+  select, input, textarea {
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 14px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    border-radius: var(--radius-s);
+    padding: 10px 12px;
+    color: var(--ink);
+    width: 100%;
+  }
+  select:focus, input:focus, textarea:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: 1px;
+  }
+  .period-select-row select { flex: 1; }
+  .period-close-btn {
+    flex: 0 0 auto;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    padding: 9px 12px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .stat-card {
+    flex: 1;
+    background: var(--paper);
+    border-radius: var(--radius-m);
+    padding: 14px 14px;
+    box-shadow: var(--shadow);
+  }
+  .stat-card .label { font-size: 12.5px; color: var(--ink-soft); display:flex; align-items:center; gap:6px;}
+  .stat-card .value { font-family: 'Noto Serif Thai', serif; font-size: 20px; font-weight: 700; margin-top: 4px;}
+  .stat-card.income .value { color: var(--income); }
+  .stat-card.expense .value { color: var(--expense); }
+
+  .card {
+    background: var(--paper);
+    border-radius: var(--radius-m);
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  /* ---------- Donut chart ---------- */
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .donut-canvas-box { width: 128px; height: 128px; flex: 0 0 auto; position: relative; }
+  .donut-canvas-box .donut-center {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    pointer-events: none;
+  }
+  .donut-canvas-box .donut-center .dc-label { font-size: 10.5px; color: var(--ink-soft); }
+  .donut-canvas-box .donut-center .dc-value { font-family: 'Noto Serif Thai', serif; font-size: 14px; font-weight: 700; }
+  .donut-legend { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .legend-row { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+  .legend-name { flex: 1; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .legend-value { font-weight: 600; color: var(--ink); }
+  .empty-note { color: var(--ink-soft); font-size: 13px; text-align: center; padding: 18px 0; }
+
+  /* ---------- Wallet breakdown (สรุปแต่ละกระเป๋าตามหมวดหมู่) ---------- */
+  .wb-card {
+    background: var(--paper);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .wb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .wb-wallet-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .wb-totals { display: flex; gap: 14px; font-size: 12px; text-align: right; }
+  .wb-totals div span { display: block; color: var(--ink-soft); font-size: 11px; }
+  .wb-totals .income b { color: var(--income); }
+  .wb-totals .expense b { color: var(--expense); }
+  .wb-totals b { font-family: 'Noto Serif Thai', serif; font-size: 14px; }
+  .wb-cat-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
+  .wb-cat-icon { font-size: 15px; flex: 0 0 auto; width: 20px; text-align: center; }
+  .wb-cat-name { font-size: 12.5px; color: var(--ink-soft); flex: 0 0 auto; width: 84px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .wb-cat-bar-wrap { flex: 1; height: 7px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+  .wb-cat-bar { height: 100%; border-radius: 4px; }
+  .wb-cat-amount { font-size: 12.5px; font-weight: 700; flex: 0 0 auto; width: 76px; text-align: right; }
+  .wb-cat-amount.income-cell { color: var(--income); }
+  .wb-cat-amount.expense-cell { color: var(--expense); }
+
+  /* ---------- Transaction list ---------- */
+  .tx-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+  }
+  .tx-item:last-child { border-bottom: none; }
+  .tx-icon {
+    width: 40px; height: 40px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex: 0 0 auto;
+  }
+  .tx-mid { flex: 1; min-width: 0; }
+  .tx-cat { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .tx-sub { font-size: 12px; color: var(--ink-soft); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tx-amount { font-family: 'Noto Serif Thai', serif; font-weight: 700; font-size: 15px; flex: 0 0 auto; }
+  .tx-amount.income { color: var(--income); }
+  .tx-amount.expense { color: var(--expense); }
+
+  .list-card { background: var(--paper); border-radius: var(--radius-m); padding: 6px 16px; box-shadow: var(--shadow); }
+
+  /* ---------- Ledger table (รายการแสดง) ---------- */
+  .ledger-card {
+    background: var(--paper);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table.ledger {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 720px;
+    font-size: 12.5px;
+  }
+  table.ledger thead th {
+    position: sticky; top: 0;
+    background: var(--ink);
+    color: #EAF1EC;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-weight: 600;
+    font-size: 11.5px;
+    text-align: left;
+    padding: 10px 10px;
+    white-space: nowrap;
+  }
+  table.ledger thead th.num { text-align: right; }
+  table.ledger tbody td {
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+    color: var(--ink);
+  }
+  table.ledger tbody tr { cursor: pointer; }
+  table.ledger tbody tr:hover td { background: #F5F7F4; }
+  table.ledger tbody tr:last-child td { border-bottom: none; }
+  table.ledger td.num { text-align: right; font-family: 'Noto Serif Thai', serif; font-weight: 600; }
+  table.ledger td.income-cell { color: var(--income); }
+  table.ledger td.expense-cell { color: var(--expense); }
+  table.ledger td.balance-cell { color: var(--ink); font-weight: 700; }
+  table.ledger td.note-cell {
+    color: var(--ink-soft);
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  table.ledger td.type-cell.income { color: var(--income); font-weight: 600; }
+  table.ledger td.type-cell.expense { color: var(--expense); font-weight: 600; }
+  table.ledger td.wallet-cell, table.ledger td.cat-cell { white-space: nowrap; }
+  .ledger-hint { font-size: 11.5px; color: var(--ink-soft); padding: 8px 16px 2px; }
+
+  .filter-row { display: flex; gap: 8px; overflow-x: auto; padding: 4px 20px 2px; }
+  .filter-chip {
+    flex: 0 0 auto;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink-soft);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .filter-chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* ---------- Transactions toolbar (filter + export) ---------- */
+  .tx-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 20px 2px;
+  }
+  .tx-toolbar .filter-row { padding: 0; flex: 1 1 auto; }
+  .toolbar-actions { display: flex; gap: 8px; flex: 0 0 auto; }
+  .tb-btn {
+    position: relative;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink-soft);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .tb-btn:hover { border-color: var(--gold); color: var(--ink); }
+  .filter-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #fff;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    margin-left: 4px;
+  }
+
+  /* ---------- Filter sheet fields ---------- */
+  .filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 10px; }
+  .filter-grid .field.full { grid-column: 1 / -1; }
+  .filter-actions { display: flex; gap: 10px; margin-top: 4px; }
+  .filter-actions .btn-primary { margin-top: 0; }
+  .btn-secondary {
+    flex: 0 0 auto;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    padding: 14px 18px;
+    border-radius: var(--radius-s);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* ---------- Printable report (แสดงเฉพาะตอนพิมพ์/บันทึก PDF) ---------- */
+  #printReport { display: none; }
+
+  @page {
+    size: A4 portrait;
+    margin: 14mm 12mm;
+  }
+
+  @media print {
+    html, body { background: #fff !important; }
+    body > *:not(#printReport) { display: none !important; }
+    #printReport {
+      display: block !important;
+      width: 100%;
+      font-family: 'Noto Sans Thai', sans-serif;
+      color: #16302A;
+      background: #fff;
+    }
+    #printReport h1 {
+      font-family: 'Noto Serif Thai', serif;
+      font-size: 20px;
+      margin: 0 0 4px;
+    }
+    #printMeta { font-size: 11.5px; color: #4C5D57; margin-bottom: 14px; }
+    #printSummary {
+      display: flex;
+      width: 100%;
+      margin-bottom: 16px;
+      padding: 10px 0;
+      border-top: 1.5px solid #16302A;
+      border-bottom: 1.5px solid #16302A;
+      font-size: 11.5px;
+    }
+    #printSummary > div { flex: 1; }
+    #printSummary b { font-family: 'Noto Serif Thai', serif; font-size: 15px; display: block; margin-top: 3px; }
+    table#printTable {
+      width: 100%;
+      table-layout: auto;
+      border-collapse: collapse;
+      font-size: 10px;
+    }
+    table#printTable th, table#printTable td {
+      border: 1px solid #C7D1CB;
+      padding: 5px 6px;
+      text-align: left;
+      white-space: nowrap;
+    }
+    table#printTable th:last-child, table#printTable td:last-child { white-space: normal; }
+    table#printTable th { background: #EEF2EE; font-weight: 700; }
+    table#printTable td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    table#printTable tr { page-break-inside: avoid; }
+  }
+
+  /* ---------- Manage list rows (wallets / categories / periods) ---------- */
+  .manage-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .manage-row:last-child { border-bottom: none; }
+  .manage-badge {
+    width: 38px; height: 38px; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; color: #fff; flex: 0 0 auto;
+  }
+  .manage-info { flex: 1; min-width: 0; }
+  .manage-name { font-size: 14px; font-weight: 600; }
+  .manage-sub { font-size: 12px; color: var(--ink-soft); margin-top: 1px; }
+  .manage-actions { display: flex; gap: 6px; }
+  .icon-btn {
+    border: none; background: var(--bg); color: var(--ink-soft);
+    width: 32px; height: 32px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 14px;
+  }
+  .icon-btn.danger { color: var(--expense); }
+
+  .fab-add-row { padding: 14px 20px 0; }
+  .btn-outline-add {
+    width: 100%;
+    border: 1.5px dashed var(--line);
+    background: transparent;
+    color: var(--ink-soft);
+    border-radius: var(--radius-s);
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  /* ---------- Segmented tabs (used in "More" page) ---------- */
+  .segmented {
+    display: flex;
+    background: var(--paper);
+    border-radius: var(--radius-s);
+    padding: 4px;
+    margin: 14px 20px 0;
+    box-shadow: var(--shadow);
+  }
+  .segmented button {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 9px 0;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .segmented button.active { background: var(--ink); color: #fff; }
+
+  /* ---------- Bottom nav ---------- */
+  .bottom-nav {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+    z-index: 50;
+  }
+  .nav-btn {
+    border: none; background: none; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    color: var(--ink-soft);
+    font-size: 10.5px;
+    padding: 4px 8px;
+    flex: 1;
+  }
+  .nav-btn .nav-icon { font-size: 20px; }
+  .nav-btn.active { color: var(--ink); font-weight: 700; }
+  .nav-btn.add-btn .nav-icon {
+    width: 46px; height: 46px;
+    background: var(--gold);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    margin-top: -26px;
+    box-shadow: 0 6px 16px rgba(184,145,43,0.45);
+  }
+
+  /* ---------- Type toggle (income/expense) ---------- */
+  .type-toggle { display: flex; gap: 8px; margin-bottom: 14px; }
+  .type-toggle button {
+    flex: 1;
+    border: 1.5px solid var(--line);
+    background: var(--paper);
+    padding: 10px;
+    border-radius: var(--radius-s);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .type-toggle button.active.expense { background: var(--expense-soft); border-color: var(--expense); color: var(--expense); }
+  .type-toggle button.active.income { background: var(--income-soft); border-color: var(--income); color: var(--income); }
+
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12.5px; color: var(--ink-soft); margin-bottom: 5px; font-weight: 500; }
+  .amount-input-wrap { position: relative; }
+  .amount-input-wrap input {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 24px;
+    font-weight: 700;
+    padding: 12px 12px 12px 34px;
+  }
+  .amount-input-wrap .thb-prefix {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--ink-soft); font-size: 16px; font-weight: 600;
+  }
+
+  .icon-color-row { display: flex; gap: 10px; }
+  .icon-color-row .field { flex: 1; margin-bottom: 0; }
+  .swatch-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .swatch {
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 2px solid transparent; cursor: pointer;
+  }
+  .swatch.selected { border-color: var(--ink); }
+
+  /* ---------- Modal / Sheet ---------- */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(22,48,42,0.42);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 100;
+  }
+  .overlay.open { display: flex; }
+  .sheet {
+    background: var(--bg);
+    width: 100%;
+    max-width: 480px;
+    border-radius: 22px 22px 0 0;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 18px 20px calc(24px + env(safe-area-inset-bottom));
+    animation: slideUp 0.22s ease-out;
+  }
+  @keyframes slideUp { from { transform: translateY(24px); opacity: 0.6; } to { transform: translateY(0); opacity: 1; } }
+  .sheet-handle { width: 40px; height: 4px; background: var(--line); border-radius: 4px; margin: 0 auto 14px; }
+  .sheet-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .sheet-header h3 { font-size: 18px; }
+  .sheet-close { border: none; background: var(--paper); width: 30px; height: 30px; border-radius: 50%; font-size: 15px; color: var(--ink-soft); cursor: pointer; }
+
+  .btn-primary {
+    width: 100%;
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: var(--radius-s);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .btn-danger-text {
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--expense);
+    padding: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 96px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(-6px); }
+
+  .loading-veil {
+    position: fixed; inset: 0; background: rgba(238,242,238,0.7);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 300; font-size: 13px; color: var(--ink-soft);
+  }
+  .loading-veil.hidden { display: none; }
+  .spinner {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 3px solid var(--line); border-top-color: var(--ink);
+    animation: spin 0.7s linear infinite; margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--ink-soft); }
+  .empty-state .es-icon { font-size: 34px; margin-bottom: 8px; }
+
+  /* ==============================================
+   *  DESKTOP / กว้างขึ้น — คอมพิวเตอร์, แท็บเล็ต
+   * ============================================== */
+  .header-info { flex: 0 0 auto; }
+  .dash-grid { display: block; }
+
+  @media (min-width: 900px) {
+    body { font-size: 15.5px; }
+
+    /* เนื้อหาเลื่อนไปทางขวาให้เว้นที่ไว้สำหรับแถบเมนูด้านซ้าย และขยายความกว้างสูงสุด */
+    #app {
+      max-width: 960px;
+      margin: 24px auto 24px 248px;
+      padding-bottom: 32px;
+    }
+
+    /* ---- แถบเมนู: จากล่างมือถือ → ด้านข้างซ้ายบนคอม ---- */
+    .bottom-nav {
+      position: fixed;
+      left: 0; top: 0; bottom: 0; right: auto;
+      max-width: none;
+      width: 220px;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 6px;
+      padding: 28px 14px;
+      border-top: none;
+      border-right: 1px solid var(--line);
+    }
+    .nav-btn {
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      flex: 0 0 auto;
+    }
+    .nav-btn.active { background: var(--gold-soft); color: var(--ink); }
+    .nav-btn .nav-icon { font-size: 19px; }
+    .nav-btn.add-btn {
+      order: -1;
+      margin-bottom: 10px;
+      flex-direction: row;
+      background: var(--gold);
+      color: #fff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 700;
+    }
+    .nav-btn.add-btn .nav-icon {
+      width: auto; height: auto;
+      background: none;
+      box-shadow: none;
+      margin-top: 0;
+      font-size: 18px;
+      color: #fff;
+    }
+    .nav-btn.add-btn::after { content: 'เพิ่มรายการ'; }
+
+    /* ---- Header: แนวนอน ยอดรวมซ้าย กระเป๋าขวา ---- */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      padding: 30px 34px;
+      border-radius: 24px;
+    }
+    .wallet-strip {
+      margin-top: 0;
+      flex-wrap: wrap;
+      overflow: visible;
+      justify-content: flex-end;
+      max-width: 55%;
+    }
+
+    /* ---- Dashboard: สองคอลัมน์ ---- */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      align-items: start;
+      gap: 0 24px;
+    }
+
+    /* ---- สรุปแต่ละกระเป๋าตามหมวดหมู่: กริด 2 คอลัมน์ ---- */
+    #walletBreakdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 12px;
+    }
+    .wb-card { margin-bottom: 0; }
+
+    /* ---- ตารางรายการ: ไม่ต้องเลื่อนแนวนอน ---- */
+    .ledger-hint { display: none; }
+    table.ledger { min-width: 100%; font-size: 13.5px; }
+    table.ledger thead th, table.ledger tbody td { padding: 12px 14px; }
+
+    /* ---- การ์ดรายการจัดการ (กระเป๋า/หมวดหมู่/รอบบัญชี): จัดเป็นกริด ---- */
+    .list-card {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 6px 18px;
+      padding: 16px;
+    }
+    .manage-row {
+      border: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    .fab-add-row { padding: 16px 20px 0; }
+    .btn-outline-add { width: auto; display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; }
+
+    /* ---- Modal: กล่องกลางจอ แทนแผ่นเลื่อนขึ้นจากล่าง ---- */
+    .overlay { align-items: center; }
+    .sheet {
+      border-radius: 22px;
+      max-height: 82vh;
+      animation: fadeScaleIn 0.16s ease-out;
+    }
+    @keyframes fadeScaleIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .toast { bottom: 28px; }
+  }
+
+  @media (min-width: 1200px) {
+    #app { max-width: 1180px; }
+  }
+</style>
+</head>
+<body>
+  <div id="app">
+
+    <!-- ============ HEADER ============ -->
+    <div class="app-header">
+      <div class="header-info">
+        <div class="eyebrow">บันทึกของฉัน</div>
+        <div class="total-label">ยอดคงเหลือรวมทุกกระเป๋า</div>
+        <div class="total-amount"><span class="thb">฿</span><span id="totalBalanceText">0.00</span></div>
+      </div>
+      <div class="wallet-strip" id="walletStrip"></div>
+    </div>
+
+    <!-- ============ PAGE: DASHBOARD ============ -->
+    <div class="page active" id="page-dashboard">
+      <div class="period-select-row">
+        <select id="periodSelect"></select>
+        <button class="period-close-btn" id="btnClosePeriod">✂️ ตัดรอบ</button>
+      </div>
+
+      <div class="dash-grid">
+        <div class="dash-col-main">
+          <div class="section">
+            <div class="stat-row">
+              <div class="stat-card income">
+                <div class="label">💚 รายรับ</div>
+                <div class="value" id="statIncome">฿0</div>
+              </div>
+              <div class="stat-card expense">
+                <div class="label">❤️ รายจ่าย</div>
+                <div class="value" id="statExpense">฿0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">สัดส่วนรายจ่ายตามหมวดหมู่</div>
+            <div class="card">
+              <div id="donutContainer"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash-col-side">
+          <div class="section">
+            <div class="section-title">
+              รายการล่าสุด
+              <button class="link-btn" data-nav="transactions">ดูทั้งหมด</button>
+            </div>
+            <div class="list-card" id="recentTxList"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">สรุปแต่ละกระเป๋าตามหมวดหมู่</div>
+        <div id="walletBreakdown"></div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+
+    <!-- ============ PAGE: TRANSACTIONS ============ -->
+    <div class="page" id="page-transactions">
+      <div class="section" style="padding-top:16px;">
+        <h2 style="font-size:19px;">รายการทั้งหมด</h2>
+      </div>
+      <div class="tx-toolbar">
+        <div class="filter-row" id="txFilterRow"></div>
+        <div class="toolbar-actions">
+          <button class="tb-btn" id="btnOpenFilter">🔍 ตัวกรอง<span class="filter-badge" id="filterBadge" style="display:none;"></span></button>
+          <button class="tb-btn" id="btnExportExcel">📊 Excel</button>
+          <button class="tb-btn" id="btnExportPdf">📄 PDF</button>
+        </div>
+      </div>
+      <div class="ledger-hint">เลื่อนซ้าย-ขวาเพื่อดูคอลัมน์เพิ่มเติม · แตะแถวเพื่อแก้ไข</div>
+      <div class="section">
+        <div class="ledger-card" id="allTxList"></div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+
+    <!-- ============ PAGE: WALLETS ============ -->
+    <div class="page" id="page-wallets">
+      <div class="section" style="padding-top:16px;">
+        <h2 style="font-size:19px;">กระเป๋าของฉัน</h2>
+      </div>
+      <div class="section">
+        <div class="list-card" id="walletsList"></div>
+      </div>
+      <div class="fab-add-row">
+        <button class="btn-outline-add" id="btnAddWallet">+ เพิ่มกระเป๋าใหม่</button>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+
+    <!-- ============ PAGE: MORE (categories + periods) ============ -->
+    <div class="page" id="page-more">
+      <div class="section" style="padding-top:16px;">
+        <h2 style="font-size:19px;">เพิ่มเติม</h2>
+      </div>
+      <div class="segmented">
+        <button class="seg-btn active" data-seg="categories">หมวดหมู่</button>
+        <button class="seg-btn" data-seg="periods">รอบบัญชี</button>
+      </div>
+
+      <div id="more-categories">
+        <div class="section">
+          <div class="section-title">หมวดรายจ่าย</div>
+          <div class="list-card" id="expenseCatList"></div>
+        </div>
+        <div class="section">
+          <div class="section-title">หมวดรายรับ</div>
+          <div class="list-card" id="incomeCatList"></div>
+        </div>
+        <div class="fab-add-row">
+          <button class="btn-outline-add" id="btnAddCategory">+ เพิ่มหมวดหมู่ใหม่</button>
+        </div>
+      </div>
+
+      <div id="more-periods" style="display:none;">
+        <div class="section">
+          <div class="section-title">รอบบัญชีทั้งหมด</div>
+          <div class="list-card" id="periodsList"></div>
+        </div>
+        <div class="fab-add-row">
+          <button class="btn-outline-add" id="btnAddPeriod">+ เพิ่มรอบบัญชีใหม่</button>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+
+    <!-- ============ BOTTOM NAV ============ -->
+    <div class="bottom-nav">
+      <button class="nav-btn active" data-page="dashboard">
+        <div class="nav-icon">🏠</div>หน้าหลัก
+      </button>
+      <button class="nav-btn" data-page="transactions">
+        <div class="nav-icon">📋</div>รายการ
+      </button>
+      <button class="nav-btn add-btn" id="btnQuickAdd">
+        <div class="nav-icon">+</div>
+      </button>
+      <button class="nav-btn" data-page="wallets">
+        <div class="nav-icon">👛</div>กระเป๋า
+      </button>
+      <button class="nav-btn" data-page="more">
+        <div class="nav-icon">⚙️</div>เพิ่มเติม
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ============ PRINTABLE REPORT (ใช้เฉพาะตอนส่งออก PDF — อยู่นอก #app) ============ -->
+  <div id="printReport">
+    <h1 id="printTitle">รายงานรายรับ-รายจ่าย</h1>
+    <div id="printMeta"></div>
+    <div id="printSummary"></div>
+    <table id="printTable"></table>
+  </div>
+
+  <!-- ============ OVERLAY / MODAL (shared) ============ -->
+  <div class="overlay" id="overlay">
+    <div class="sheet" id="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h3 id="sheetTitle">หัวข้อ</h3>
+        <button class="sheet-close" id="sheetClose">✕</button>
+      </div>
+      <div id="sheetBody"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="loading-veil" id="loadingVeil"><div class="spinner"></div>กำลังโหลด...</div>
+
+  <script>
+/* ==============================================
+ *  บันทึกรายรับ-รายจ่าย — Client logic
+ * ============================================== */
+
+const ICON_PRESETS = ['💵','🏦','💳','👛','🐷','🍜','🚗','🛍️','💡','🎬','💊','📦','💼','🎁','➕','🏠','✈️','📱','🎓','🐾'];
+const COLOR_PRESETS = ['#16302A','#2F7A56','#B44B36','#B8912B','#3E7A9A','#7A5AB8','#B8506F','#4E9A6E','#8A8A82','#C97B3D'];
+
+const STATE = {
+  wallets: [],
+  categories: [],
+  periods: [],
+  currentPeriodId: null,
+  currentPage: 'dashboard',
+  filters: { type: 'all', walletId: '', categoryId: '', periodId: '', dateStart: '', dateEnd: '' },
+  editing: null // { kind, id }
+};
+
+/* ---------- server call helper ---------- */
+// !!! สำคัญ: แก้ URL นี้เป็นลิงก์ Web app (/exec) ของคุณเอง จาก Deploy → Manage deployments !!!
+const API_URL = 'https://script.google.com/macros/s/AKfycbzZ2P5HPqQ7zfM9iyhfgvJOP2jMZAYRSWfLxoZNXDesAEqiQ0KB4z-WDFAX3UBYbwPM8Q/exec';
+
+function callServer(fnName, ...args) {
+  return fetch(API_URL, {
+    method: 'POST',
+    // ใช้ text/plain เพื่อเลี่ยง CORS preflight (Apps Script ตอบ OPTIONS ไม่ได้)
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: fnName, params: args })
+  })
+    .then(res => res.json())
+    .then(json => {
+      if (!json || !json.success) throw new Error((json && json.error) || 'เกิดข้อผิดพลาดจากเซิร์ฟเวอร์');
+      return json.data;
+    });
+}
+
+function showLoading(show) {
+  document.getElementById('loadingVeil').classList.toggle('hidden', !show);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function fmtMoney(n) {
+  const v = Number(n) || 0;
+  return v.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function fmtDateShort(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const yyyy = d.getFullYear(); // ค.ศ. (Date ของ JS เป็นปีคริสต์ศักราชเสมอ ไม่ว่า locale ใด)
+  return `${dd}/${mm}/${yyyy}`;
+}
+
+function fmtDateInput(iso) {
+  if (!iso) return new Date().toISOString().slice(0, 10);
+  return new Date(iso).toISOString().slice(0, 10);
+}
+
+/* ---------- init ---------- */
+async function init() {
+  showLoading(true);
+  try {
+    const data = await callServer('getInitialData');
+    STATE.wallets = data.wallets;
+    STATE.categories = data.categories;
+    STATE.periods = data.periods;
+    const active = STATE.periods.find(p => p.status === 'active') || STATE.periods[0];
+    STATE.currentPeriodId = active ? active.id : null;
+
+    bindNav();
+    bindGlobalHandlers();
+    await refreshDashboard();
+  } catch (e) {
+    showToast('เกิดข้อผิดพลาด: ' + (e.message || e));
+  } finally {
+    showLoading(false);
+  }
+}
+
+/* ---------- navigation ---------- */
+function bindNav() {
+  document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => showPage(btn.dataset.page));
+  });
+  document.querySelectorAll('[data-nav]').forEach(btn => {
+    btn.addEventListener('click', () => showPage(btn.dataset.nav));
+  });
+  document.getElementById('btnQuickAdd').addEventListener('click', () => openTransactionForm());
+
+  document.querySelectorAll('.seg-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const seg = btn.dataset.seg;
+      document.getElementById('more-categories').style.display = seg === 'categories' ? '' : 'none';
+      document.getElementById('more-periods').style.display = seg === 'periods' ? '' : 'none';
+    });
+  });
+}
+
+function showPage(name) {
+  STATE.currentPage = name;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-btn[data-page]').forEach(b => b.classList.toggle('active', b.dataset.page === name));
+
+  if (name === 'transactions') renderAllTransactions();
+  if (name === 'wallets') renderWalletsPage();
+  if (name === 'more') renderMorePage();
+}
+
+function bindGlobalHandlers() {
+  document.getElementById('sheetClose').addEventListener('click', closeSheet);
+  document.getElementById('overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'overlay') closeSheet();
+  });
+  document.getElementById('periodSelect').addEventListener('change', (e) => {
+    STATE.currentPeriodId = e.target.value;
+    refreshDashboard();
+  });
+  document.getElementById('btnClosePeriod').addEventListener('click', openClosePeriodForm);
+  document.getElementById('btnAddWallet').addEventListener('click', () => openWalletForm());
+  document.getElementById('btnAddCategory').addEventListener('click', () => openCategoryForm());
+  document.getElementById('btnAddPeriod').addEventListener('click', () => openPeriodForm());
+  document.getElementById('btnOpenFilter').addEventListener('click', openFilterSheet);
+  document.getElementById('btnExportExcel').addEventListener('click', exportExcel);
+  document.getElementById('btnExportPdf').addEventListener('click', exportPdf);
+}
+
+/* ---------- sheet / modal ---------- */
+function openSheet(title, bodyHtml) {
+  document.getElementById('sheetTitle').textContent = title;
+  document.getElementById('sheetBody').innerHTML = bodyHtml;
+  document.getElementById('overlay').classList.add('open');
+}
+function closeSheet() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('sheetBody').innerHTML = '';
+}
+
+/* ==============================================
+ *  DASHBOARD
+ * ============================================== */
+async function refreshDashboard() {
+  renderPeriodSelect();
+  showLoading(true);
+  try {
+    const data = await callServer('getDashboardData', STATE.currentPeriodId);
+    if (data.currentPeriod) {
+      STATE.currentPeriodId = data.currentPeriod.id;
+      document.getElementById('periodSelect').value = data.currentPeriod.id;
+    }
+    document.getElementById('totalBalanceText').textContent = fmtMoney(data.totalBalance);
+    renderWalletStrip(data.walletBalances);
+    document.getElementById('statIncome').textContent = '฿' + fmtMoney(data.totalIncome);
+    document.getElementById('statExpense').textContent = '฿' + fmtMoney(data.totalExpense);
+    renderDonut(data.donutData, data.totalExpense);
+    renderRecentTx(data.recentTx);
+
+    const breakdown = await callServer('getWalletCategoryBreakdown', STATE.currentPeriodId);
+    renderWalletBreakdown(breakdown);
+  } catch (e) {
+    showToast('โหลดข้อมูลไม่สำเร็จ: ' + (e.message || e));
+  } finally {
+    showLoading(false);
+  }
+}
+
+function renderWalletBreakdown(breakdown) {
+  const el = document.getElementById('walletBreakdown');
+  if (!breakdown || !breakdown.length) {
+    el.innerHTML = '<div class="empty-state"><div class="es-icon">👛</div>ยังไม่มีกระเป๋า</div>';
+    return;
+  }
+
+  el.innerHTML = breakdown.map(w => {
+    const expenseCats = w.categoryBreakdown.filter(c => c.expense > 0).sort((a, b) => b.expense - a.expense);
+    const maxExpense = Math.max(1, ...expenseCats.map(c => c.expense));
+
+    const rows = expenseCats.length ? expenseCats.map(c => `
+      <div class="wb-cat-row">
+        <div class="wb-cat-icon">${c.icon}</div>
+        <div class="wb-cat-name">${escapeHtml(c.name)}</div>
+        <div class="wb-cat-bar-wrap"><div class="wb-cat-bar" style="width:${(c.expense / maxExpense * 100).toFixed(0)}%; background:${c.color}"></div></div>
+        <div class="wb-cat-amount expense-cell">฿${fmtMoney(c.expense)}</div>
+      </div>
+    `).join('') : '<div class="empty-note">ยังไม่มีรายจ่ายในรอบนี้</div>';
+
+    return `
+      <div class="wb-card">
+        <div class="wb-header">
+          <div class="wb-wallet-name">${w.icon} ${escapeHtml(w.name)}</div>
+          <div class="wb-totals">
+            <div class="income"><span>รายรับ</span><b>฿${fmtMoney(w.income)}</b></div>
+            <div class="expense"><span>รายจ่าย</span><b>฿${fmtMoney(w.expense)}</b></div>
+          </div>
+        </div>
+        ${rows}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderPeriodSelect() {
+  const sel = document.getElementById('periodSelect');
+  sel.innerHTML = STATE.periods.map(p => {
+    const label = p.name + (p.status === 'active' ? ' (ปัจจุบัน)' : '');
+    return `<option value="${p.id}" ${p.id === STATE.currentPeriodId ? 'selected' : ''}>${escapeHtml(label)}</option>`;
+  }).join('');
+}
+
+function renderWalletStrip(walletBalances) {
+  const el = document.getElementById('walletStrip');
+  if (!walletBalances.length) {
+    el.innerHTML = '';
+    return;
+  }
+  el.innerHTML = walletBalances.map(w => `
+    <div class="wallet-chip">
+      <div class="wc-name"><span>${w.icon}</span><span>${escapeHtml(w.name)}</span></div>
+      <div class="wc-balance">฿${fmtMoney(w.balance)}</div>
+    </div>
+  `).join('');
+}
+
+function renderDonut(donutData, totalExpense) {
+  const container = document.getElementById('donutContainer');
+  if (!donutData.length || totalExpense <= 0) {
+    container.innerHTML = '<div class="empty-note">ยังไม่มีรายจ่ายในรอบนี้</div>';
+    return;
+  }
+  const size = 128, stroke = 20, r = (size - stroke) / 2, cx = size / 2, cy = size / 2;
+  const circumference = 2 * Math.PI * r;
+  let offsetAcc = 0;
+  const circles = donutData.map(d => {
+    const frac = d.value / totalExpense;
+    const dash = frac * circumference;
+    const gap = circumference - dash;
+    const circle = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${d.color}" stroke-width="${stroke}"
+        stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${-offsetAcc}" transform="rotate(-90 ${cx} ${cy})" />`;
+    offsetAcc += dash;
+    return circle;
+  }).join('');
+
+  const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${circles}</svg>`;
+
+  const legend = donutData.slice(0, 6).map(d => `
+    <div class="legend-row">
+      <div class="legend-dot" style="background:${d.color}"></div>
+      <div class="legend-name">${d.icon} ${escapeHtml(d.name)}</div>
+      <div class="legend-value">฿${fmtMoney(d.value)}</div>
+    </div>
+  `).join('');
+
+  container.innerHTML = `
+    <div class="donut-wrap">
+      <div class="donut-canvas-box">
+        ${svg}
+        <div class="donut-center">
+          <div class="dc-label">รวมจ่าย</div>
+          <div class="dc-value">฿${fmtMoney(totalExpense)}</div>
+        </div>
+      </div>
+      <div class="donut-legend">${legend}</div>
+    </div>
+  `;
+}
+
+function txRowHtml(t) {
+  const sign = t.type === 'income' ? '+' : '-';
+  return `
+    <div class="tx-item" onclick="openTransactionForm('${t.id}')">
+      <div class="tx-icon" style="background:${t.categoryColor}22;">${t.categoryIcon}</div>
+      <div class="tx-mid">
+        <div class="tx-cat">${escapeHtml(t.categoryName)}</div>
+        <div class="tx-sub">${t.walletIcon} ${escapeHtml(t.walletName)} · ${fmtDateShort(t.date)}${t.note ? ' · ' + escapeHtml(t.note) : ''}</div>
+      </div>
+      <div class="tx-amount ${t.type}">${sign}฿${fmtMoney(t.amount)}</div>
+    </div>
+  `;
+}
+
+function renderRecentTx(list) {
+  const el = document.getElementById('recentTxList');
+  el.innerHTML = list.length ? list.map(txRowHtml).join('') :
+    '<div class="empty-state"><div class="es-icon">🧾</div>ยังไม่มีรายการ<br>แตะปุ่ม + เพื่อเริ่มบันทึก</div>';
+}
+
+/* ==============================================
+ *  TRANSACTIONS PAGE
+ * ============================================== */
+async function renderAllTransactions() {
+  showLoading(true);
+  try {
+    const f = STATE.filters;
+    const payload = { sort: 'asc' };
+    if (f.type && f.type !== 'all') payload.type = f.type;
+    if (f.walletId) payload.walletId = f.walletId;
+    if (f.categoryId) payload.categoryId = f.categoryId;
+    if (f.periodId) payload.periodId = f.periodId;
+    if (f.dateStart) payload.dateStart = f.dateStart;
+    if (f.dateEnd) payload.dateEnd = f.dateEnd;
+
+    const list = await callServer('getTransactions', payload);
+    STATE._txCache = list;
+    renderTxFilterRow();
+    renderFilterBadge();
+    renderLedgerTable(list);
+  } catch (e) {
+    showToast('โหลดรายการไม่สำเร็จ: ' + (e.message || e));
+  } finally {
+    showLoading(false);
+  }
+}
+
+function renderFilterBadge() {
+  const f = STATE.filters;
+  const count = ['walletId', 'categoryId', 'periodId', 'dateStart', 'dateEnd'].filter(k => f[k]).length;
+  const badge = document.getElementById('filterBadge');
+  if (count > 0) {
+    badge.style.display = 'inline-block';
+    badge.textContent = count;
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function renderLedgerTable(list) {
+  const el = document.getElementById('allTxList');
+  if (!list.length) {
+    el.innerHTML = '<div class="empty-state"><div class="es-icon">🧾</div>ไม่มีรายการที่ตรงกับตัวกรอง</div>';
+    return;
+  }
+  const rows = list.map(t => `
+    <tr onclick="openTransactionForm('${t.id}')">
+      <td>${t.rowNo}</td>
+      <td>${fmtDateShort(t.date)}</td>
+      <td class="wallet-cell">${t.walletIcon} ${escapeHtml(t.walletName)}</td>
+      <td class="type-cell ${t.type}">${t.type === 'income' ? 'รายรับ' : 'รายจ่าย'}</td>
+      <td class="cat-cell">${t.categoryIcon} ${escapeHtml(t.categoryName)}</td>
+      <td class="num income-cell">${t.type === 'income' ? fmtMoney(t.amount) : '—'}</td>
+      <td class="num expense-cell">${t.type === 'expense' ? fmtMoney(t.amount) : '—'}</td>
+      <td class="num balance-cell">${fmtMoney(t.balance)}</td>
+      <td class="note-cell">${escapeHtml(t.note || '')}</td>
+    </tr>
+  `).join('');
+
+  el.innerHTML = `
+    <table class="ledger">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>วันที่</th>
+          <th>กระเป๋าเงิน</th>
+          <th>ประเภท</th>
+          <th>หมวดหมู่</th>
+          <th class="num">รายรับ</th>
+          <th class="num">รายจ่าย</th>
+          <th class="num">คงเหลือ</th>
+          <th>หมายเหตุ</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+/* ---------- Export: สรุปยอดของชุดข้อมูลที่กรองอยู่ ---------- */
+function summarizeTx(list) {
+  let income = 0, expense = 0;
+  list.forEach(t => { if (t.type === 'income') income += t.amount; else expense += t.amount; });
+  return { income, expense, net: income - expense, count: list.length };
+}
+
+function filterDescriptionText() {
+  const f = STATE.filters;
+  const parts = [];
+  if (f.type && f.type !== 'all') parts.push(f.type === 'income' ? 'เฉพาะรายรับ' : 'เฉพาะรายจ่าย');
+  if (f.walletId) { const w = STATE.wallets.find(x => x.id === f.walletId); if (w) parts.push('กระเป๋า: ' + w.name); }
+  if (f.categoryId) { const c = STATE.categories.find(x => x.id === f.categoryId); if (c) parts.push('หมวดหมู่: ' + c.name); }
+  if (f.periodId) { const p = STATE.periods.find(x => x.id === f.periodId); if (p) parts.push('รอบบัญชี: ' + p.name); }
+  if (f.dateStart) parts.push('ตั้งแต่ ' + fmtDateShort(f.dateStart));
+  if (f.dateEnd) parts.push('ถึง ' + fmtDateShort(f.dateEnd));
+  return parts.length ? parts.join(' · ') : 'ทุกรายการ';
+}
+
+/* ---------- Export: Excel (.xlsx) ---------- */
+function exportExcel() {
+  const list = STATE._txCache || [];
+  if (!list.length) return showToast('ไม่มีรายการให้ส่งออก');
+  if (typeof XLSX === 'undefined') return showToast('โหลดไลบรารี Excel ไม่สำเร็จ กรุณาเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่');
+
+  const s = summarizeTx(list);
+  const rows = list.map(t => ({
+    'ลำดับ': t.rowNo,
+    'วันที่': fmtDateShort(t.date),
+    'กระเป๋าเงิน': t.walletName,
+    'ประเภท': t.type === 'income' ? 'รายรับ' : 'รายจ่าย',
+    'หมวดหมู่': t.categoryName,
+    'รายรับ': t.type === 'income' ? t.amount : '',
+    'รายจ่าย': t.type === 'expense' ? t.amount : '',
+    'คงเหลือ': t.balance,
+    'หมายเหตุ': t.note || ''
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [{ wch: 7 }, { wch: 11 }, { wch: 16 }, { wch: 9 }, { wch: 16 }, { wch: 12 }, { wch: 12 }, { wch: 13 }, { wch: 26 }];
+
+  const summaryWs = XLSX.utils.aoa_to_sheet([
+    ['สรุปรายงานรายรับ-รายจ่าย'],
+    ['เงื่อนไข', filterDescriptionText()],
+    ['จำนวนรายการ', s.count],
+    ['รายรับรวม', s.income],
+    ['รายจ่ายรวม', s.expense],
+    ['คงเหลือสุทธิ', s.net]
+  ]);
+  summaryWs['!cols'] = [{ wch: 18 }, { wch: 30 }];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, summaryWs, 'สรุป');
+  XLSX.utils.book_append_sheet(wb, ws, 'รายการ');
+
+  const filename = 'รายงานรายรับรายจ่าย_' + new Date().toISOString().slice(0, 10) + '.xlsx';
+  XLSX.writeFile(wb, filename);
+  showToast('ดาวน์โหลดไฟล์ Excel แล้ว');
+}
+
+/* ---------- Export: PDF (ผ่านหน้าต่างพิมพ์ของเบราว์เซอร์ → บันทึกเป็น PDF) ---------- */
+function exportPdf() {
+  const list = STATE._txCache || [];
+  if (!list.length) return showToast('ไม่มีรายการให้ส่งออก');
+  const s = summarizeTx(list);
+  const printList = list.slice().sort((a, b) => a.rowNo - b.rowNo); // เรียงจากเก่าสุด (1) ไปใหม่สุด สำหรับรายงาน
+
+  document.getElementById('printMeta').textContent =
+    'เงื่อนไข: ' + filterDescriptionText() + ' · พิมพ์เมื่อ ' + fmtDateShort(new Date());
+
+  document.getElementById('printSummary').innerHTML = `
+    <div>จำนวนรายการ<br><b>${s.count}</b></div>
+    <div>รายรับรวม<br><b>฿${fmtMoney(s.income)}</b></div>
+    <div>รายจ่ายรวม<br><b>฿${fmtMoney(s.expense)}</b></div>
+    <div>คงเหลือสุทธิ<br><b>฿${fmtMoney(s.net)}</b></div>
+  `;
+
+  const rows = printList.map(t => `
+    <tr>
+      <td>${t.rowNo}</td>
+      <td>${fmtDateShort(t.date)}</td>
+      <td>${escapeHtml(t.walletName)}</td>
+      <td>${t.type === 'income' ? 'รายรับ' : 'รายจ่าย'}</td>
+      <td>${escapeHtml(t.categoryName)}</td>
+      <td class="num">${t.type === 'income' ? fmtMoney(t.amount) : ''}</td>
+      <td class="num">${t.type === 'expense' ? fmtMoney(t.amount) : ''}</td>
+      <td class="num">${fmtMoney(t.balance)}</td>
+      <td>${escapeHtml(t.note || '')}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('printTable').innerHTML = `
+    <thead>
+      <tr>
+        <th>ลำดับ</th><th>วันที่</th><th>กระเป๋าเงิน</th><th>ประเภท</th><th>หมวดหมู่</th>
+        <th>รายรับ</th><th>รายจ่าย</th><th>คงเหลือ</th><th>หมายเหตุ</th>
+      </tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  `;
+
+  showToast('เปิดหน้าต่างพิมพ์ → เลือก "บันทึกเป็น PDF"');
+  setTimeout(() => window.print(), 150);
+}
+
+function renderTxFilterRow() {
+  const el = document.getElementById('txFilterRow');
+  const options = [['all', 'ทั้งหมด'], ['expense', 'รายจ่าย'], ['income', 'รายรับ']];
+  el.innerHTML = options.map(([val, label]) => `
+    <button class="filter-chip ${STATE.filters.type === val ? 'active' : ''}" data-filter="${val}">${label}</button>
+  `).join('');
+  el.querySelectorAll('.filter-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      STATE.filters.type = btn.dataset.filter;
+      renderAllTransactions();
+    });
+  });
+}
+
+/* ---------- advanced filter sheet ---------- */
+function openFilterSheet() {
+  const f = STATE.filters;
+  const walletOptions = `<option value="">ทั้งหมด</option>` + STATE.wallets.map(w =>
+    `<option value="${w.id}" ${f.walletId === w.id ? 'selected' : ''}>${w.icon} ${escapeHtml(w.name)}</option>`).join('');
+  const categoryOptions = `<option value="">ทั้งหมด</option>` + STATE.categories.map(c =>
+    `<option value="${c.id}" ${f.categoryId === c.id ? 'selected' : ''}>${c.icon} ${escapeHtml(c.name)} (${c.type === 'income' ? 'รายรับ' : 'รายจ่าย'})</option>`).join('');
+  const periodOptions = `<option value="">ทั้งหมด</option>` + STATE.periods.map(p =>
+    `<option value="${p.id}" ${f.periodId === p.id ? 'selected' : ''}>${escapeHtml(p.name)}</option>`).join('');
+
+  const body = `
+    <div class="filter-grid">
+      <div class="field full">
+        <label>กระเป๋า</label>
+        <select id="ffWallet">${walletOptions}</select>
+      </div>
+      <div class="field full">
+        <label>หมวดหมู่</label>
+        <select id="ffCategory">${categoryOptions}</select>
+      </div>
+      <div class="field full">
+        <label>รอบบัญชี</label>
+        <select id="ffPeriod">${periodOptions}</select>
+      </div>
+      <div class="field">
+        <label>ตั้งแต่วันที่</label>
+        <input type="date" lang="en-GB" id="ffDateStart" value="${f.dateStart || ''}">
+      </div>
+      <div class="field">
+        <label>ถึงวันที่</label>
+        <input type="date" lang="en-GB" id="ffDateEnd" value="${f.dateEnd || ''}">
+      </div>
+    </div>
+    <div class="filter-actions">
+      <button class="btn-secondary" id="btnResetFilter">ล้างตัวกรอง</button>
+      <button class="btn-primary" id="btnApplyFilter">แสดงผลลัพธ์</button>
+    </div>
+  `;
+  openSheet('ตัวกรองรายการ', body);
+
+  document.getElementById('btnApplyFilter').addEventListener('click', () => {
+    STATE.filters.walletId = document.getElementById('ffWallet').value;
+    STATE.filters.categoryId = document.getElementById('ffCategory').value;
+    STATE.filters.periodId = document.getElementById('ffPeriod').value;
+    STATE.filters.dateStart = document.getElementById('ffDateStart').value;
+    STATE.filters.dateEnd = document.getElementById('ffDateEnd').value;
+    closeSheet();
+    renderAllTransactions();
+  });
+
+  document.getElementById('btnResetFilter').addEventListener('click', () => {
+    STATE.filters.walletId = '';
+    STATE.filters.categoryId = '';
+    STATE.filters.periodId = '';
+    STATE.filters.dateStart = '';
+    STATE.filters.dateEnd = '';
+    closeSheet();
+    renderAllTransactions();
+  });
+}
+
+/* ---- Add / edit transaction form ---- */
+function openTransactionForm(txId) {
+  let tx = null;
+  if (txId) {
+    // find from whichever list we have cached isn't reliable; fetch fresh minimal via categories/wallets combo not needed
+    tx = STATE._txCache && STATE._txCache.find(t => t.id === txId);
+  }
+  if (txId && !tx) {
+    // fallback: fetch full list once and cache
+    callServer('getTransactions', {}).then(list => {
+      STATE._txCache = list;
+      openTransactionForm(txId);
+    });
+    return;
+  }
+
+  const type = tx ? tx.type : 'expense';
+  const walletOptions = STATE.wallets.map(w => `<option value="${w.id}" ${tx && tx.walletId === w.id ? 'selected' : ''}>${w.icon} ${escapeHtml(w.name)}</option>`).join('');
+
+  const body = `
+    <div class="type-toggle" id="typeToggle">
+      <button type="button" data-type="expense" class="${type === 'expense' ? 'active expense' : ''}">➖ รายจ่าย</button>
+      <button type="button" data-type="income" class="${type === 'income' ? 'active income' : ''}">➕ รายรับ</button>
+    </div>
+    <div class="field">
+      <label>จำนวนเงิน</label>
+      <div class="amount-input-wrap">
+        <span class="thb-prefix">฿</span>
+        <input type="number" id="fAmount" inputmode="decimal" step="0.01" min="0" placeholder="0.00" value="${tx ? tx.amount : ''}">
+      </div>
+    </div>
+    <div class="field">
+      <label>หมวดหมู่</label>
+      <select id="fCategory"></select>
+    </div>
+    <div class="field">
+      <label>กระเป๋า</label>
+      <select id="fWallet">${walletOptions}</select>
+    </div>
+    <div class="field">
+      <label>วันที่</label>
+      <input type="date" lang="en-GB" id="fDate" value="${fmtDateInput(tx ? tx.date : null)}">
+    </div>
+    <div class="field">
+      <label>โน้ต (ไม่บังคับ)</label>
+      <input type="text" id="fNote" placeholder="เช่น มื้อเที่ยงกับเพื่อน" value="${tx ? escapeAttr(tx.note || '') : ''}">
+    </div>
+    <button class="btn-primary" id="btnSaveTx">${tx ? 'บันทึกการแก้ไข' : 'บันทึกรายการ'}</button>
+    ${tx ? '<button class="btn-danger-text" id="btnDeleteTx">ลบรายการนี้</button>' : ''}
+  `;
+  openSheet(tx ? 'แก้ไขรายการ' : 'เพิ่มรายการใหม่', body);
+
+  let currentType = type;
+  function refreshCategoryOptions() {
+    const cats = STATE.categories.filter(c => c.type === currentType);
+    document.getElementById('fCategory').innerHTML = cats.map(c =>
+      `<option value="${c.id}" ${tx && tx.categoryId === c.id ? 'selected' : ''}>${c.icon} ${escapeHtml(c.name)}</option>`
+    ).join('') || '<option value="">ยังไม่มีหมวดหมู่</option>';
+  }
+  refreshCategoryOptions();
+
+  document.querySelectorAll('#typeToggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentType = btn.dataset.type;
+      document.querySelectorAll('#typeToggle button').forEach(b => b.classList.remove('active', 'income', 'expense'));
+      btn.classList.add('active', currentType);
+      refreshCategoryOptions();
+    });
+  });
+
+  document.getElementById('btnSaveTx').addEventListener('click', async () => {
+    const amount = parseFloat(document.getElementById('fAmount').value);
+    const categoryId = document.getElementById('fCategory').value;
+    const walletId = document.getElementById('fWallet').value;
+    const date = document.getElementById('fDate').value;
+    const note = document.getElementById('fNote').value.trim();
+
+    if (!amount || amount <= 0) return showToast('กรุณาระบุจำนวนเงิน');
+    if (!categoryId) return showToast('กรุณาเลือกหมวดหมู่');
+    if (!walletId) return showToast('กรุณาเลือกกระเป๋า');
+
+    const payload = { type: currentType, amount, categoryId, walletId, date, note };
+    showLoading(true);
+    try {
+      if (tx) {
+        await callServer('updateTransaction', tx.id, payload);
+        showToast('แก้ไขรายการเรียบร้อย');
+      } else {
+        await callServer('addTransaction', payload);
+        showToast('บันทึกรายการเรียบร้อย');
+      }
+      STATE._txCache = null;
+      closeSheet();
+      await refreshDashboard();
+      if (STATE.currentPage === 'transactions') renderAllTransactions();
+    } catch (e) {
+      showToast('บันทึกไม่สำเร็จ: ' + (e.message || e));
+    } finally {
+      showLoading(false);
+    }
+  });
+
+  if (tx) {
+    document.getElementById('btnDeleteTx').addEventListener('click', async () => {
+      if (!confirm('ต้องการลบรายการนี้หรือไม่?')) return;
+      showLoading(true);
+      try {
+        await callServer('deleteTransaction', tx.id);
+        STATE._txCache = null;
+        closeSheet();
+        showToast('ลบรายการแล้ว');
+        await refreshDashboard();
+        if (STATE.currentPage === 'transactions') renderAllTransactions();
+      } catch (e) {
+        showToast('ลบไม่สำเร็จ: ' + (e.message || e));
+      } finally {
+        showLoading(false);
+      }
+    });
+  }
+}
+
+/* ==============================================
+ *  WALLETS PAGE
+ * ============================================== */
+function renderWalletsPage() {
+  const el = document.getElementById('walletsList');
+  el.innerHTML = STATE.wallets.length ? STATE.wallets.map(w => `
+    <div class="manage-row">
+      <div class="manage-badge" style="background:${w.color}">${w.icon}</div>
+      <div class="manage-info">
+        <div class="manage-name">${escapeHtml(w.name)}</div>
+        <div class="manage-sub">ยอดตั้งต้น ฿${fmtMoney(w.initialBalance)}</div>
+      </div>
+      <div class="manage-actions">
+        <button class="icon-btn" onclick="openWalletForm('${w.id}')">✏️</button>
+        <button class="icon-btn danger" onclick="deleteWallet('${w.id}')">🗑️</button>
+      </div>
+    </div>
+  `).join('') : '<div class="empty-state"><div class="es-icon">👛</div>ยังไม่มีกระเป๋า</div>';
+}
+
+function openWalletForm(id) {
+  const w = id ? STATE.wallets.find(x => x.id === id) : null;
+  const body = `
+    <div class="field">
+      <label>ชื่อกระเป๋า</label>
+      <input type="text" id="fName" placeholder="เช่น เงินสด, บัญชีออมทรัพย์" value="${w ? escapeAttr(w.name) : ''}">
+    </div>
+    <div class="field">
+      <label>ยอดเงินตั้งต้น</label>
+      <input type="number" id="fInitial" step="0.01" value="${w ? w.initialBalance : 0}">
+    </div>
+    <div class="icon-color-row">
+      <div class="field">
+        <label>ไอคอน</label>
+        <div class="swatch-grid" id="iconGrid"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>สี</label>
+      <div class="swatch-grid" id="colorGrid"></div>
+    </div>
+    <button class="btn-primary" id="btnSaveWallet">${w ? 'บันทึกการแก้ไข' : 'เพิ่มกระเป๋า'}</button>
+  `;
+  openSheet(w ? 'แก้ไขกระเป๋า' : 'เพิ่มกระเป๋าใหม่', body);
+  buildIconGrid('iconGrid', w ? w.icon : ICON_PRESETS[0]);
+  buildColorGrid('colorGrid', w ? w.color : COLOR_PRESETS[0]);
+
+  document.getElementById('btnSaveWallet').addEventListener('click', async () => {
+    const name = document.getElementById('fName').value.trim();
+    const initialBalance = parseFloat(document.getElementById('fInitial').value) || 0;
+    const icon = document.querySelector('#iconGrid .swatch.selected').dataset.val;
+    const color = document.querySelector('#colorGrid .swatch.selected').dataset.val;
+    if (!name) return showToast('กรุณาระบุชื่อกระเป๋า');
+
+    showLoading(true);
+    try {
+      if (w) {
+        await callServer('updateWallet', w.id, { name, initialBalance, icon, color });
+      } else {
+        await callServer('addWallet', { name, initialBalance, icon, color });
+      }
+      const fresh = await callServer('getInitialData');
+      STATE.wallets = fresh.wallets;
+      closeSheet();
+      showToast('บันทึกกระเป๋าเรียบร้อย');
+      renderWalletsPage();
+      await refreshDashboard();
+    } catch (e) {
+      showToast('บันทึกไม่สำเร็จ: ' + (e.message || e));
+    } finally {
+      showLoading(false);
+    }
+  });
+}
+
+async function deleteWallet(id) {
+  if (!confirm('ต้องการลบกระเป๋านี้หรือไม่?')) return;
+  showLoading(true);
+  try {
+    await callServer('deleteWallet', id);
+    const fresh = await callServer('getInitialData');
+    STATE.wallets = fresh.wallets;
+    showToast('ลบกระเป๋าแล้ว');
+    renderWalletsPage();
+    await refreshDashboard();
+  } catch (e) {
+    showToast(e.message || 'ลบไม่สำเร็จ');
+  } finally {
+    showLoading(false);
+  }
+}
+
+/* ==============================================
+ *  MORE PAGE — CATEGORIES + PERIODS
+ * ============================================== */
+function renderMorePage() {
+  renderCategoriesLists();
+  renderPeriodsList();
+}
+
+function catRowHtml(c) {
+  return `
+    <div class="manage-row">
+      <div class="manage-badge" style="background:${c.color}">${c.icon}</div>
+      <div class="manage-info"><div class="manage-name">${escapeHtml(c.name)}</div></div>
+      <div class="manage-actions">
+        <button class="icon-btn" onclick="openCategoryForm('${c.id}')">✏️</button>
+        <button class="icon-btn danger" onclick="deleteCategory('${c.id}')">🗑️</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderCategoriesLists() {
+  const expense = STATE.categories.filter(c => c.type === 'expense');
+  const income = STATE.categories.filter(c => c.type === 'income');
+  document.getElementById('expenseCatList').innerHTML = expense.length ? expense.map(catRowHtml).join('') :
+    '<div class="empty-state">ยังไม่มีหมวดรายจ่าย</div>';
+  document.getElementById('incomeCatList').innerHTML = income.length ? income.map(catRowHtml).join('') :
+    '<div class="empty-state">ยังไม่มีหมวดรายรับ</div>';
+}
+
+function openCategoryForm(id) {
+  const c = id ? STATE.categories.find(x => x.id === id) : null;
+  const type = c ? c.type : 'expense';
+  const body = `
+    <div class="type-toggle" id="catTypeToggle">
+      <button type="button" data-type="expense" class="${type === 'expense' ? 'active expense' : ''}">รายจ่าย</button>
+      <button type="button" data-type="income" class="${type === 'income' ? 'active income' : ''}">รายรับ</button>
+    </div>
+    <div class="field">
+      <label>ชื่อหมวดหมู่</label>
+      <input type="text" id="fCatName" placeholder="เช่น อาหาร, เดินทาง" value="${c ? escapeAttr(c.name) : ''}">
+    </div>
+    <div class="field">
+      <label>ไอคอน</label>
+      <div class="swatch-grid" id="catIconGrid"></div>
+    </div>
+    <div class="field">
+      <label>สี</label>
+      <div class="swatch-grid" id="catColorGrid"></div>
+    </div>
+    <button class="btn-primary" id="btnSaveCategory">${c ? 'บันทึกการแก้ไข' : 'เพิ่มหมวดหมู่'}</button>
+  `;
+  openSheet(c ? 'แก้ไขหมวดหมู่' : 'เพิ่มหมวดหมู่ใหม่', body);
+  buildIconGrid('catIconGrid', c ? c.icon : ICON_PRESETS[5]);
+  buildColorGrid('catColorGrid', c ? c.color : COLOR_PRESETS[2]);
+
+  let currentType = type;
+  document.querySelectorAll('#catTypeToggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentType = btn.dataset.type;
+      document.querySelectorAll('#catTypeToggle button').forEach(b => b.classList.remove('active', 'income', 'expense'));
+      btn.classList.add('active', currentType);
+    });
+  });
+
+  document.getElementById('btnSaveCategory').addEventListener('click', async () => {
+    const name = document.getElementById('fCatName').value.trim();
+    const icon = document.querySelector('#catIconGrid .swatch.selected').dataset.val;
+    const color = document.querySelector('#catColorGrid .swatch.selected').dataset.val;
+    if (!name) return showToast('กรุณาระบุชื่อหมวดหมู่');
+
+    showLoading(true);
+    try {
+      if (c) {
+        await callServer('updateCategory', c.id, { name, type: currentType, icon, color });
+      } else {
+        await callServer('addCategory', { name, type: currentType, icon, color });
+      }
+      const fresh = await callServer('getInitialData');
+      STATE.categories = fresh.categories;
+      closeSheet();
+      showToast('บันทึกหมวดหมู่เรียบร้อย');
+      renderCategoriesLists();
+    } catch (e) {
+      showToast('บันทึกไม่สำเร็จ: ' + (e.message || e));
+    } finally {
+      showLoading(false);
+    }
+  });
+}
+
+async function deleteCategory(id) {
+  if (!confirm('ต้องการลบหมวดหมู่นี้หรือไม่?')) return;
+  showLoading(true);
+  try {
+    await callServer('deleteCategory', id);
+    const fresh = await callServer('getInitialData');
+    STATE.categories = fresh.categories;
+    showToast('ลบหมวดหมู่แล้ว');
+    renderCategoriesLists();
+  } catch (e) {
+    showToast(e.message || 'ลบไม่สำเร็จ');
+  } finally {
+    showLoading(false);
+  }
+}
+
+/* ---------- Periods (ตัดรอบบัญชี) ---------- */
+function renderPeriodsList() {
+  const el = document.getElementById('periodsList');
+  el.innerHTML = STATE.periods.length ? STATE.periods.map(p => `
+    <div class="manage-row">
+      <div class="manage-badge" style="background:${p.status === 'active' ? '#2F7A56' : '#8A8A82'}">${p.status === 'active' ? '🟢' : '⚪️'}</div>
+      <div class="manage-info">
+        <div class="manage-name">${escapeHtml(p.name)}</div>
+        <div class="manage-sub">${fmtDateShort(p.startDate)} — ${p.endDate ? fmtDateShort(p.endDate) : 'ปัจจุบัน'}</div>
+      </div>
+      <div class="manage-actions">
+        <button class="icon-btn" onclick="openPeriodForm('${p.id}')">✏️</button>
+        <button class="icon-btn danger" onclick="deletePeriod('${p.id}')">🗑️</button>
+      </div>
+    </div>
+  `).join('') : '<div class="empty-state">ยังไม่มีรอบบัญชี</div>';
+}
+
+function openPeriodForm(id) {
+  const p = id ? STATE.periods.find(x => x.id === id) : null;
+  const body = `
+    <div class="field">
+      <label>ชื่อรอบบัญชี</label>
+      <input type="text" id="fPeriodName" placeholder="เช่น รอบเดือนกันยายน 2569" value="${p ? escapeAttr(p.name) : ''}">
+    </div>
+    <div class="field">
+      <label>วันที่เริ่มต้น</label>
+      <input type="date" lang="en-GB" id="fPeriodStart" value="${fmtDateInput(p ? p.startDate : null)}">
+    </div>
+    <div class="field">
+      <label>วันที่สิ้นสุด (เว้นว่างได้ถ้ายังไม่ปิดรอบ)</label>
+      <input type="date" lang="en-GB" id="fPeriodEnd" value="${p && p.endDate ? fmtDateInput(p.endDate) : ''}">
+    </div>
+    <button class="btn-primary" id="btnSavePeriod">${p ? 'บันทึกการแก้ไข' : 'เพิ่มรอบบัญชี'}</button>
+  `;
+  openSheet(p ? 'แก้ไขรอบบัญชี' : 'เพิ่มรอบบัญชีใหม่', body);
+
+  document.getElementById('btnSavePeriod').addEventListener('click', async () => {
+    const name = document.getElementById('fPeriodName').value.trim();
+    const startDate = document.getElementById('fPeriodStart').value;
+    const endDate = document.getElementById('fPeriodEnd').value;
+    if (!name) return showToast('กรุณาระบุชื่อรอบบัญชี');
+    if (!startDate) return showToast('กรุณาระบุวันที่เริ่มต้น');
+
+    showLoading(true);
+    try {
+      const status = endDate ? 'closed' : (p ? p.status : 'active');
+      if (p) {
+        await callServer('updatePeriod', p.id, { name, startDate, endDate, status });
+      } else {
+        await callServer('addPeriod', { name, startDate, endDate, status });
+      }
+      const fresh = await callServer('getInitialData');
+      STATE.periods = fresh.periods;
+      closeSheet();
+      showToast('บันทึกรอบบัญชีเรียบร้อย');
+      renderPeriodsList();
+      await refreshDashboard();
+    } catch (e) {
+      showToast('บันทึกไม่สำเร็จ: ' + (e.message || e));
+    } finally {
+      showLoading(false);
+    }
+  });
+}
+
+async function deletePeriod(id) {
+  if (!confirm('ต้องการลบรอบบัญชีนี้หรือไม่?')) return;
+  showLoading(true);
+  try {
+    await callServer('deletePeriod', id);
+    const fresh = await callServer('getInitialData');
+    STATE.periods = fresh.periods;
+    showToast('ลบรอบบัญชีแล้ว');
+    renderPeriodsList();
+    await refreshDashboard();
+  } catch (e) {
+    showToast(e.message || 'ลบไม่สำเร็จ');
+  } finally {
+    showLoading(false);
+  }
+}
+
+/* ---------- Close period (ตัดรอบ) from dashboard ---------- */
+function openClosePeriodForm() {
+  const current = STATE.periods.find(p => p.id === STATE.currentPeriodId);
+  if (!current) return showToast('ไม่พบรอบบัญชีปัจจุบัน');
+  if (current.status !== 'active') return showToast('รอบนี้ถูกปิดไปแล้ว');
+
+  const body = `
+    <p style="color:var(--ink-soft); font-size:13.5px; margin-top:0;">
+      ปิดรอบ "${escapeHtml(current.name)}" และเริ่มรอบบัญชีใหม่ต่อโดยอัตโนมัติ
+    </p>
+    <div class="field">
+      <label>วันที่ตัดรอบ (วันสุดท้ายของรอบนี้)</label>
+      <input type="date" lang="en-GB" id="fCutDate" value="${new Date().toISOString().slice(0, 10)}">
+    </div>
+    <div class="field">
+      <label>ชื่อรอบใหม่ (ไม่บังคับ)</label>
+      <input type="text" id="fNewPeriodName" placeholder="ปล่อยว่างเพื่อตั้งชื่ออัตโนมัติ">
+    </div>
+    <button class="btn-primary" id="btnConfirmClose">ยืนยันตัดรอบ</button>
+  `;
+  openSheet('ตัดรอบบัญชี', body);
+
+  document.getElementById('btnConfirmClose').addEventListener('click', async () => {
+    const cutDate = document.getElementById('fCutDate').value;
+    const newName = document.getElementById('fNewPeriodName').value.trim();
+    showLoading(true);
+    try {
+      const newId = await callServer('closePeriodAndStartNew', current.id, cutDate, newName);
+      const fresh = await callServer('getInitialData');
+      STATE.periods = fresh.periods;
+      STATE.currentPeriodId = newId;
+      closeSheet();
+      showToast('ตัดรอบบัญชีเรียบร้อย');
+      await refreshDashboard();
+    } catch (e) {
+      showToast('ตัดรอบไม่สำเร็จ: ' + (e.message || e));
+    } finally {
+      showLoading(false);
+    }
+  });
+}
+
+/* ---------- icon / color pickers ---------- */
+function buildIconGrid(gridId, selected) {
+  const el = document.getElementById(gridId);
+  el.innerHTML = ICON_PRESETS.map(icon => `
+    <div class="swatch ${icon === selected ? 'selected' : ''}" data-val="${icon}"
+         style="display:flex;align-items:center;justify-content:center;background:#F0EFE8;font-size:14px;">${icon}</div>
+  `).join('');
+  el.querySelectorAll('.swatch').forEach(s => {
+    s.addEventListener('click', () => {
+      el.querySelectorAll('.swatch').forEach(x => x.classList.remove('selected'));
+      s.classList.add('selected');
+    });
+  });
+}
+
+function buildColorGrid(gridId, selected) {
+  const el = document.getElementById(gridId);
+  el.innerHTML = COLOR_PRESETS.map(color => `
+    <div class="swatch ${color === selected ? 'selected' : ''}" data-val="${color}" style="background:${color}"></div>
+  `).join('');
+  el.querySelectorAll('.swatch').forEach(s => {
+    s.addEventListener('click', () => {
+      el.querySelectorAll('.swatch').forEach(x => x.classList.remove('selected'));
+      s.classList.add('selected');
+    });
+  });
+}
+
+/* ---------- utils ---------- */
+function escapeHtml(str) {
+  if (str === undefined || str === null) return '';
+  return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+}
+function escapeAttr(str) { return escapeHtml(str); }
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
