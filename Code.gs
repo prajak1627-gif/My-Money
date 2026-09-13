@@ -31,6 +31,48 @@ function doGet(e) {
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
+/* ---------------------------------------------
+ *  JSON API (สำหรับหน้าเว็บที่ฝากไว้ที่อื่น เช่น GitHub Pages
+ *  เรียกผ่าน fetch() ด้วย POST, Content-Type: text/plain
+ *  body: { "action": "ชื่อฟังก์ชัน", "params": [ ...อาร์กิวเมนต์ ] }
+ * -------------------------------------------- */
+const API_ALLOWED_FUNCTIONS_ = {
+  getInitialData, getDashboardData, getWalletCategoryBreakdown,
+  getWallets, addWallet, updateWallet, deleteWallet,
+  getCategories, addCategory, updateCategory, deleteCategory,
+  getPeriods, addPeriod, updatePeriod, deletePeriod, closePeriodAndStartNew,
+  getTransactions, addTransaction, updateTransaction, deleteTransaction
+};
+
+function doPost(e) {
+  setupSheets();
+
+  let action, params;
+  try {
+    const body = JSON.parse(e.postData.contents);
+    action = body.action;
+    params = body.params || [];
+  } catch (err) {
+    return jsonResponse_({ success: false, error: 'รูปแบบคำขอไม่ถูกต้อง (invalid request body)' });
+  }
+
+  const fn = API_ALLOWED_FUNCTIONS_[action];
+  if (!fn) {
+    return jsonResponse_({ success: false, error: 'ไม่รู้จักคำสั่ง: ' + action });
+  }
+
+  try {
+    const result = fn.apply(null, params);
+    return jsonResponse_({ success: true, data: result });
+  } catch (err) {
+    return jsonResponse_({ success: false, error: err.message || String(err) });
+  }
+}
+
+function jsonResponse_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
 function include(filename) {
   return HtmlService.createHtmlOutputFromFile(filename).getContent();
 }
@@ -450,7 +492,73 @@ function getDashboardData(periodId) {
     })
     .sort((a, b) => b.value - a.value);
 
-  const recentTx = getTransactions({}).slice(0, 8);
+  // รายการล่าสุด — ใช้ allTx ที่โหลดไว้แล้ว ไม่อ่านชีตซ้ำ (เร็วขึ้นมาก)
+  const chronological = allTx.slice().sort((a, b) => new Date(a.Date) - new Date(b.Date));
+  const runningByWallet = {};
+  wallets.forEach(w => (runningByWallet[w.id] = w.initialBalance));
+  const balanceById = {};
+  const rowNoById = {};
+  chronological.forEach((t, i) => {
+    if (!(t.WalletID in runningByWallet)) runningByWallet[t.WalletID] = 0;
+    if (t.Type === 'income') runningByWallet[t.WalletID] += Number(t.Amount) || 0;
+    else runningByWallet[t.WalletID] -= Number(t.Amount) || 0;
+    balanceById[t.ID] = runningByWallet[t.WalletID];
+    rowNoById[t.ID] = i + 1;
+  });
+
+  const recentTx = allTx
+    .slice()
+    .sort((a, b) => new Date(b.Date) - new Date(a.Date))
+    .slice(0, 8)
+    .map(t => {
+      const wallet = wallets.find(w => w.id === t.WalletID);
+      const cat = categories.find(c => c.id === t.CategoryID);
+      return {
+        id: t.ID,
+        rowNo: rowNoById[t.ID] || 0,
+        date: toIsoDate_(t.Date),
+        type: t.Type,
+        walletId: t.WalletID,
+        walletName: wallet ? wallet.name : '-',
+        walletIcon: wallet ? wallet.icon : '❓',
+        categoryId: t.CategoryID,
+        categoryName: cat ? cat.name : 'ไม่ระบุ',
+        categoryIcon: cat ? cat.icon : '📁',
+        categoryColor: cat ? cat.color : '#8A8A82',
+        amount: Number(t.Amount) || 0,
+        note: t.Note,
+        periodId: t.PeriodID,
+        balance: balanceById[t.ID] !== undefined ? balanceById[t.ID] : (wallet ? wallet.initialBalance : 0)
+      };
+    });
+
+  // สรุปแต่ละกระเป๋าตามหมวดหมู่ — คำนวณจาก periodTx ที่มีอยู่แล้ว ไม่เรียกฟังก์ชันแยก (ลดรอบเรียก API ฝั่ง client)
+  const walletBreakdown = wallets.map(w => {
+    const walletTx = periodTx.filter(t => String(t.WalletID) === String(w.id));
+    let wIncome = 0, wExpense = 0;
+    const catMap = {};
+    walletTx.forEach(t => {
+      const amt = Number(t.Amount) || 0;
+      if (t.Type === 'income') wIncome += amt; else wExpense += amt;
+      if (!catMap[t.CategoryID]) catMap[t.CategoryID] = { income: 0, expense: 0 };
+      if (t.Type === 'income') catMap[t.CategoryID].income += amt;
+      else catMap[t.CategoryID].expense += amt;
+    });
+    const categoryBreakdown = Object.keys(catMap).map(catId => {
+      const cat = categories.find(c => c.id === catId);
+      return {
+        id: catId,
+        name: cat ? cat.name : 'ไม่ระบุ',
+        icon: cat ? cat.icon : '📁',
+        color: cat ? cat.color : '#8A8A82',
+        type: cat ? cat.type : 'expense',
+        income: catMap[catId].income,
+        expense: catMap[catId].expense
+      };
+    }).sort((a, b) => (b.income + b.expense) - (a.income + a.expense));
+
+    return { id: w.id, name: w.name, icon: w.icon, color: w.color, income: wIncome, expense: wExpense, categoryBreakdown };
+  });
 
   return {
     walletBalances,
@@ -460,6 +568,7 @@ function getDashboardData(periodId) {
     net: totalIncome - totalExpense,
     donutData,
     recentTx,
+    walletBreakdown,
     currentPeriod: period,
     periods
   };
