@@ -1187,7 +1187,14 @@ function applyDashboardData(data) {
   document.getElementById('statExpense').textContent = '฿' + fmtMoney(data.totalExpense);
   renderDonut(data.donutData, data.totalExpense);
   renderRecentTx(data.recentTx);
-  renderWalletBreakdown(data.walletBreakdown);
+  if (data.walletBreakdown) {
+    renderWalletBreakdown(data.walletBreakdown);
+  } else {
+    // เซิร์ฟเวอร์ยังเป็นเวอร์ชันเก่า (ไม่ส่ง walletBreakdown มา) — ขอแยกอีกรอบเป็นตัวสำรอง
+    callServer('getWalletCategoryBreakdown', STATE.currentPeriodId)
+      .then(renderWalletBreakdown)
+      .catch(() => {});
+  }
 }
 
 function renderWalletBreakdown(breakdown) {
