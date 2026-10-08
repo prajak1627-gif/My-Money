@@ -569,6 +569,8 @@ function getDashboardData(periodId) {
     donutData,
     recentTx,
     walletBreakdown,
+    wallets,
+    categories,
     currentPeriod: period,
     periods
   };
