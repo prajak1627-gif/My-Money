@@ -16,6 +16,7 @@
   <meta name="apple-mobile-web-app-title" content="บันทึกเงิน">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.js"></script>
   <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap');
 
@@ -798,6 +799,21 @@
   @media (min-width: 1200px) {
     #app { max-width: 1180px; }
   }
+
+  /* ---------- Login (Supabase) ---------- */
+  #loginScreen {
+    position: fixed; inset: 0; z-index: 400;
+    background: var(--ink);
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  #loginScreen.open { display: flex; }
+  .login-card {
+    background: var(--paper); border-radius: 22px; width: 100%; max-width: 380px;
+    padding: 26px 22px 22px; box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  }
+  .login-card h2 { font-size: 20px; margin-bottom: 4px; }
+  .login-card p.sub { color: var(--ink-soft); font-size: 13px; margin: 0 0 18px; }
+  .login-error { color: var(--expense); font-size: 13px; min-height: 18px; margin-bottom: 8px; }
 </style>
 </head>
 <body>
@@ -928,6 +944,13 @@
           <button class="btn-outline-add" id="btnAddPeriod">+ เพิ่มรอบบัญชีใหม่</button>
         </div>
       </div>
+      <div class="section">
+        <div class="section-title">บัญชีผู้ใช้</div>
+        <div class="card">
+          <div id="userLabel" style="font-size:13px;color:var(--ink-soft);margin-bottom:10px;"></div>
+          <button class="btn-secondary" id="btnLogout" style="width:100%;">ออกจากระบบ</button>
+        </div>
+      </div>
       <div style="height:16px"></div>
     </div>
 
@@ -975,6 +998,23 @@
   <div class="toast" id="toast"></div>
   <div class="loading-veil" id="loadingVeil"><div class="spinner"></div>กำลังโหลด...</div>
 
+  <div id="loginScreen">
+    <form class="login-card" id="loginForm" autocomplete="on">
+      <h2>เข้าสู่ระบบ</h2>
+      <p class="sub">บันทึกรายรับ-รายจ่าย</p>
+      <div class="field">
+        <label for="loginEmail">อีเมล</label>
+        <input type="email" id="loginEmail" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="loginPassword">รหัสผ่าน</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" required>
+      </div>
+      <div class="login-error" id="loginError"></div>
+      <button type="submit" class="btn-primary" id="btnLogin">เข้าสู่ระบบ</button>
+    </form>
+  </div>
+
   <script>
 /* ==============================================
  *  บันทึกรายรับ-รายจ่าย — Client logic
@@ -994,43 +1034,416 @@ const STATE = {
 };
 
 /* ---------- server call helper ---------- */
-// !!! สำคัญ: แก้ URL นี้เป็นลิงก์ Web app (/exec) ของคุณเอง จาก Deploy → Manage deployments !!!
-const API_URL = 'https://script.google.com/macros/s/AKfycbzZ2P5HPqQ7zfM9iyhfgvJOP2jMZAYRSWfLxoZNXDesAEqiQ0KB4z-WDFAX3UBYbwPM8Q/exec';
+/* ===== SUPABASE DATA LAYER BEGIN ===== */
+// !!! ใส่ค่าจาก Supabase → Project Settings → API (ใช้ anon / publishable key เท่านั้น ห้ามใส่ service_role) !!!
+const SUPABASE_URL = 'https://ojcdiayirwjoiipedeib.supabase.co/rest/v1/';
+const SUPABASE_ANON_KEY = 'sb_publishable__US1pLOY-LwX7ymUAXAUqg_eqA8WOC_';
 
-async function callServer(fnName, ...args) {
-  // Apps Script ตอบช้า/บางครั้งตอบเป็นหน้า error (HTML) แทน JSON จึงลองใหม่อัตโนมัติ สูงสุด 3 ครั้ง
-  let lastErr;
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 60000);
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        // ใช้ text/plain เพื่อเลี่ยง CORS preflight (Apps Script ตอบ OPTIONS ไม่ได้)
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: fnName, params: args }),
-        signal: ctrl.signal
-      });
-      const text = await res.text();
-      clearTimeout(timer);
-      let json;
-      try { json = JSON.parse(text); } catch (e) { throw new Error('เซิร์ฟเวอร์ตอบกลับผิดรูปแบบ'); }
-      if (!json.success) {
-        const err = new Error(json.error || 'เกิดข้อผิดพลาดจากเซิร์ฟเวอร์');
-        err.noRetry = true; // error จากตัวโค้ดเอง ไม่ต้องลองซ้ำ
-        throw err;
-      }
-      return json.data;
-    } catch (err) {
-      clearTimeout(timer);
-      lastErr = (err && err.name === 'AbortError') ? new Error('เซิร์ฟเวอร์ตอบช้าเกินไป') : err;
-      if (err && err.noRetry) throw lastErr;
-      // คำสั่งที่แก้ไขข้อมูล ห้ามลองซ้ำ เพราะอาจบันทึกซ้ำสองรายการ
-      if (!/^(get)/.test(fnName)) throw lastErr;
-    }
+let sbClient_ = null;
+function getSb() {
+  if (sbClient_) return sbClient_;
+  if (!SUPABASE_URL || SUPABASE_URL.indexOf('YOUR-PROJECT') !== -1 || SUPABASE_ANON_KEY.indexOf('YOUR-ANON') !== -1) {
+    throw new Error('ยังไม่ได้ตั้งค่า SUPABASE_URL / SUPABASE_ANON_KEY ในไฟล์ index.html');
   }
-  throw lastErr;
+  if (!window.supabase) throw new Error('โหลดไลบรารี Supabase ไม่สำเร็จ ตรวจสอบอินเทอร์เน็ต');
+  sbClient_ = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  return sbClient_;
 }
+
+function isoDate_(d) {
+  if (!d) return '';
+  const date = (d instanceof Date) ? d : new Date(d);
+  return isNaN(date) ? '' : date.toISOString();
+}
+
+function dbFail_(error, fkMessage) {
+  if (!error) return;
+  if (error.code === '23503' && fkMessage) throw new Error(fkMessage);
+  throw new Error(error.message || 'เกิดข้อผิดพลาดจากฐานข้อมูล');
+}
+
+// อ่านทั้งตาราง แบ่งหน้าละ 1,000 แถว (Supabase จำกัด 1,000 แถวต่อคำขอ)
+async function dbAll_(table) {
+  const out = [];
+  const size = 1000;
+  for (let from = 0; ; from += size) {
+    const { data, error } = await getSb().from(table).select('*')
+      .order('created_at', { ascending: true }).order('id', { ascending: true })
+      .range(from, from + size - 1);
+    dbFail_(error);
+    out.push(...data);
+    if (data.length < size) break;
+  }
+  return out;
+}
+
+const mapWallet_ = r => ({ id: r.id, name: r.name, icon: r.icon, color: r.color, initialBalance: Number(r.initial_balance) || 0 });
+const mapCategory_ = r => ({ id: r.id, name: r.name, type: r.type, icon: r.icon, color: r.color });
+const mapPeriod_ = r => ({ id: r.id, name: r.name, startDate: isoDate_(r.start_date), endDate: r.end_date ? isoDate_(r.end_date) : '', status: r.status });
+const mapTx_ = r => ({ ID: r.id, Date: new Date(r.date), Type: r.type, WalletID: r.wallet_id, CategoryID: r.category_id, Amount: Number(r.amount) || 0, Note: r.note || '', PeriodID: r.period_id || '' });
+const sortPeriods_ = list => list.slice().sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+
+async function loadAll_() {
+  const [w, c, p, t] = await Promise.all([dbAll_('wallets'), dbAll_('categories'), dbAll_('periods'), dbAll_('transactions')]);
+  return {
+    wallets: w.map(mapWallet_),
+    categories: c.map(mapCategory_),
+    periods: sortPeriods_(p.map(mapPeriod_)),
+    txs: t.map(mapTx_)
+  };
+}
+
+function newId_() { return crypto.randomUUID(); }
+
+function computeDashboard_(periodId, wallets, categories, periods, allTx) {
+
+  // ยอดคงเหลือของแต่ละกระเป๋า = ยอดตั้งต้น + รายรับทั้งหมด - รายจ่ายทั้งหมด (ตลอดกาล ไม่ขึ้นกับรอบบัญชี)
+  const walletBalances = wallets.map(w => {
+    let income = 0, expense = 0;
+    allTx.forEach(t => {
+      if (String(t.WalletID) === String(w.id)) {
+        if (t.Type === 'income') income += Number(t.Amount);
+        else expense += Number(t.Amount);
+      }
+    });
+    return {
+      id: w.id, name: w.name, icon: w.icon, color: w.color,
+      balance: w.initialBalance + income - expense
+    };
+  });
+  const totalBalance = walletBalances.reduce((s, w) => s + w.balance, 0);
+
+  // เลือกรอบบัญชีที่จะสรุป
+  let period = null;
+  if (periodId) period = periods.find(p => p.id === periodId);
+  if (!period) period = periods.find(p => p.status === 'active') || periods[0];
+
+  let periodTx = allTx;
+  if (period) {
+    const start = new Date(period.startDate);
+    const end = period.endDate ? new Date(period.endDate) : null;
+    periodTx = allTx.filter(t => {
+      const d = new Date(t.Date);
+      return d >= start && (!end || d <= end);
+    });
+  }
+
+  let totalIncome = 0, totalExpense = 0;
+  const expenseByCategory = {};
+  periodTx.forEach(t => {
+    const amt = Number(t.Amount) || 0;
+    if (t.Type === 'income') {
+      totalIncome += amt;
+    } else {
+      totalExpense += amt;
+      expenseByCategory[t.CategoryID] = (expenseByCategory[t.CategoryID] || 0) + amt;
+    }
+  });
+
+  const donutData = Object.keys(expenseByCategory)
+    .map(catId => {
+      const cat = categories.find(c => c.id === catId);
+      return {
+        name: cat ? cat.name : 'ไม่ระบุ',
+        icon: cat ? cat.icon : '📁',
+        color: cat ? cat.color : '#8A8A82',
+        value: expenseByCategory[catId]
+      };
+    })
+    .sort((a, b) => b.value - a.value);
+
+  // รายการล่าสุด — ใช้ allTx ที่โหลดไว้แล้ว ไม่อ่านชีตซ้ำ (เร็วขึ้นมาก)
+  const chronological = allTx.slice().sort((a, b) => new Date(a.Date) - new Date(b.Date));
+  const runningByWallet = {};
+  wallets.forEach(w => (runningByWallet[w.id] = w.initialBalance));
+  const balanceById = {};
+  const rowNoById = {};
+  chronological.forEach((t, i) => {
+    if (!(t.WalletID in runningByWallet)) runningByWallet[t.WalletID] = 0;
+    if (t.Type === 'income') runningByWallet[t.WalletID] += Number(t.Amount) || 0;
+    else runningByWallet[t.WalletID] -= Number(t.Amount) || 0;
+    balanceById[t.ID] = runningByWallet[t.WalletID];
+    rowNoById[t.ID] = i + 1;
+  });
+
+  const recentTx = allTx
+    .slice()
+    .sort((a, b) => new Date(b.Date) - new Date(a.Date))
+    .slice(0, 8)
+    .map(t => {
+      const wallet = wallets.find(w => w.id === t.WalletID);
+      const cat = categories.find(c => c.id === t.CategoryID);
+      return {
+        id: t.ID,
+        rowNo: rowNoById[t.ID] || 0,
+        date: isoDate_(t.Date),
+        type: t.Type,
+        walletId: t.WalletID,
+        walletName: wallet ? wallet.name : '-',
+        walletIcon: wallet ? wallet.icon : '❓',
+        categoryId: t.CategoryID,
+        categoryName: cat ? cat.name : 'ไม่ระบุ',
+        categoryIcon: cat ? cat.icon : '📁',
+        categoryColor: cat ? cat.color : '#8A8A82',
+        amount: Number(t.Amount) || 0,
+        note: t.Note,
+        periodId: t.PeriodID,
+        balance: balanceById[t.ID] !== undefined ? balanceById[t.ID] : (wallet ? wallet.initialBalance : 0)
+      };
+    });
+
+  // สรุปแต่ละกระเป๋าตามหมวดหมู่ — คำนวณจาก periodTx ที่มีอยู่แล้ว ไม่เรียกฟังก์ชันแยก (ลดรอบเรียก API ฝั่ง client)
+  const walletBreakdown = wallets.map(w => {
+    const walletTx = periodTx.filter(t => String(t.WalletID) === String(w.id));
+    let wIncome = 0, wExpense = 0;
+    const catMap = {};
+    walletTx.forEach(t => {
+      const amt = Number(t.Amount) || 0;
+      if (t.Type === 'income') wIncome += amt; else wExpense += amt;
+      if (!catMap[t.CategoryID]) catMap[t.CategoryID] = { income: 0, expense: 0 };
+      if (t.Type === 'income') catMap[t.CategoryID].income += amt;
+      else catMap[t.CategoryID].expense += amt;
+    });
+    const categoryBreakdown = Object.keys(catMap).map(catId => {
+      const cat = categories.find(c => c.id === catId);
+      return {
+        id: catId,
+        name: cat ? cat.name : 'ไม่ระบุ',
+        icon: cat ? cat.icon : '📁',
+        color: cat ? cat.color : '#8A8A82',
+        type: cat ? cat.type : 'expense',
+        income: catMap[catId].income,
+        expense: catMap[catId].expense
+      };
+    }).sort((a, b) => (b.income + b.expense) - (a.income + a.expense));
+
+    return { id: w.id, name: w.name, icon: w.icon, color: w.color, income: wIncome, expense: wExpense, categoryBreakdown };
+  });
+
+  return {
+    walletBalances,
+    totalBalance,
+    totalIncome,
+    totalExpense,
+    net: totalIncome - totalExpense,
+    donutData,
+    recentTx,
+    walletBreakdown,
+    wallets,
+    categories,
+    currentPeriod: period,
+    periods
+  };
+}
+
+function computeTransactions_(filters, wallets, categories, allTxRaw) {
+  filters = filters || {};
+
+  // คำนวณยอดคงเหลือสะสม (คงเหลือ) ของแต่ละกระเป๋า ต้องไล่ตามลำดับเวลาจริง (เก่า -> ใหม่)
+  // ก่อนตัดกรองใดๆ เพื่อให้ยอดคงเหลือถูกต้องเสมอ ไม่ว่าจะกรองแบบไหนภายหลัง
+  const chronological = allTxRaw.slice().sort((a, b) => new Date(a.Date) - new Date(b.Date));
+  const runningByWallet = {};
+  wallets.forEach(w => (runningByWallet[w.id] = w.initialBalance));
+  const balanceById = {};
+  chronological.forEach(t => {
+    const wId = t.WalletID;
+    if (!(wId in runningByWallet)) runningByWallet[wId] = 0;
+    if (t.Type === 'income') runningByWallet[wId] += Number(t.Amount) || 0;
+    else runningByWallet[wId] -= Number(t.Amount) || 0;
+    balanceById[t.ID] = runningByWallet[wId];
+  });
+
+  let txs = allTxRaw;
+  if (filters.periodId) txs = txs.filter(t => String(t.PeriodID) === String(filters.periodId));
+  if (filters.walletId) txs = txs.filter(t => String(t.WalletID) === String(filters.walletId));
+  if (filters.categoryId) txs = txs.filter(t => String(t.CategoryID) === String(filters.categoryId));
+  if (filters.type) txs = txs.filter(t => t.Type === filters.type);
+  if (filters.dateStart) {
+    const start = new Date(filters.dateStart);
+    txs = txs.filter(t => new Date(t.Date) >= start);
+  }
+  if (filters.dateEnd) {
+    const end = new Date(filters.dateEnd);
+    end.setHours(23, 59, 59, 999);
+    txs = txs.filter(t => new Date(t.Date) <= end);
+  }
+
+  const mapped = txs.map(t => {
+    const wallet = wallets.find(w => w.id === t.WalletID);
+    const cat = categories.find(c => c.id === t.CategoryID);
+    return {
+      id: t.ID,
+      date: isoDate_(t.Date),
+      type: t.Type,
+      walletId: t.WalletID,
+      walletName: wallet ? wallet.name : '-',
+      walletIcon: wallet ? wallet.icon : '❓',
+      categoryId: t.CategoryID,
+      categoryName: cat ? cat.name : 'ไม่ระบุ',
+      categoryIcon: cat ? cat.icon : '📁',
+      categoryColor: cat ? cat.color : '#8A8A82',
+      amount: Number(t.Amount) || 0,
+      note: t.Note,
+      periodId: t.PeriodID,
+      balance: balanceById[t.ID] !== undefined ? balanceById[t.ID] : (wallet ? wallet.initialBalance : 0)
+    };
+  });
+
+  const sortAsc = filters.sort === 'asc';
+  mapped.sort((a, b) => sortAsc ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date));
+
+  // เลขลำดับ (ID แถวที่แสดงในตาราง) นับจากรายการเก่าสุด = 1 เสมอ ไม่ว่าจะเรียงลำดับแบบไหน
+  const chronoIndex = {};
+  chronological.forEach((t, i) => (chronoIndex[t.ID] = i + 1));
+  mapped.forEach(t => (t.rowNo = chronoIndex[t.id] || 0));
+
+  return mapped;
+}
+
+function findPeriodIdForDate_(dateObj, periods) {
+  const d = new Date(dateObj);
+  // ลำดับเดียวกับชีตเดิม: เรียงตามเวลาสร้าง (periods ที่ส่งเข้ามายังไม่ถูกเรียงใหม่)
+  for (const p of periods) {
+    const start = new Date(p.start_date);
+    const end = p.end_date ? new Date(p.end_date) : null;
+    if (d >= start && (!end || d <= end)) return p.id;
+  }
+  return '';
+}
+
+const SUPABASE_API_ = {
+  async getInitialData() {
+    const [w, c, p] = await Promise.all([dbAll_('wallets'), dbAll_('categories'), dbAll_('periods')]);
+    return { wallets: w.map(mapWallet_), categories: c.map(mapCategory_), periods: sortPeriods_(p.map(mapPeriod_)) };
+  },
+  async getDashboardData(periodId) {
+    const a = await loadAll_();
+    return computeDashboard_(periodId, a.wallets, a.categories, a.periods, a.txs);
+  },
+  async getWalletCategoryBreakdown(periodId) {
+    return (await SUPABASE_API_.getDashboardData(periodId)).walletBreakdown;
+  },
+  async getTransactions(filters) {
+    const a = await loadAll_();
+    return computeTransactions_(filters, a.wallets, a.categories, a.txs);
+  },
+
+  async getWallets() { return (await dbAll_('wallets')).map(mapWallet_); },
+  async addWallet(data) {
+    const id = newId_();
+    const { error } = await getSb().from('wallets').insert({
+      id, name: data.name, icon: data.icon || '💰', color: data.color || '#16302A', initial_balance: Number(data.initialBalance) || 0
+    });
+    dbFail_(error);
+    return id;
+  },
+  async updateWallet(id, data) {
+    const { error } = await getSb().from('wallets').update({
+      name: data.name, icon: data.icon, color: data.color, initial_balance: Number(data.initialBalance) || 0
+    }).eq('id', id);
+    dbFail_(error);
+    return true;
+  },
+  async deleteWallet(id) {
+    const { error } = await getSb().from('wallets').delete().eq('id', id);
+    dbFail_(error, 'ลบไม่ได้ เนื่องจากมีรายการที่ผูกกับกระเป๋านี้อยู่');
+    return true;
+  },
+
+  async getCategories() { return (await dbAll_('categories')).map(mapCategory_); },
+  async addCategory(data) {
+    const id = newId_();
+    const { error } = await getSb().from('categories').insert({
+      id, name: data.name, type: data.type, icon: data.icon || '📁', color: data.color || '#8A8A82'
+    });
+    dbFail_(error);
+    return id;
+  },
+  async updateCategory(id, data) {
+    const { error } = await getSb().from('categories').update({
+      name: data.name, type: data.type, icon: data.icon, color: data.color
+    }).eq('id', id);
+    dbFail_(error);
+    return true;
+  },
+  async deleteCategory(id) {
+    const { error } = await getSb().from('categories').delete().eq('id', id);
+    dbFail_(error, 'ลบไม่ได้ เนื่องจากมีรายการที่ผูกกับหมวดหมู่นี้อยู่');
+    return true;
+  },
+
+  async getPeriods() { return sortPeriods_((await dbAll_('periods')).map(mapPeriod_)); },
+  async addPeriod(data) {
+    const id = newId_();
+    const { error } = await getSb().from('periods').insert({
+      id, name: data.name,
+      start_date: (data.startDate ? new Date(data.startDate) : new Date()).toISOString(),
+      end_date: data.endDate ? new Date(data.endDate).toISOString() : null,
+      status: data.status || 'active'
+    });
+    dbFail_(error);
+    return id;
+  },
+  async updatePeriod(id, data) {
+    const patch = { name: data.name, end_date: data.endDate ? new Date(data.endDate).toISOString() : null, status: data.status || 'active' };
+    if (data.startDate) patch.start_date = new Date(data.startDate).toISOString();
+    const { error } = await getSb().from('periods').update(patch).eq('id', id);
+    dbFail_(error);
+    return true;
+  },
+  // ตัดรอบบัญชี: ปิดรอบปัจจุบัน แล้วเปิดรอบใหม่ต่อจากวันถัดไป
+  async closePeriodAndStartNew(id, endDate, newPeriodName) {
+    const end = endDate ? new Date(endDate) : new Date();
+    const { error } = await getSb().from('periods').update({ end_date: end.toISOString(), status: 'closed' }).eq('id', id);
+    dbFail_(error);
+    const nextStart = new Date(end);
+    nextStart.setDate(nextStart.getDate() + 1);
+    const monthYear = new Intl.DateTimeFormat('th-TH-u-ca-gregory', { month: 'long', year: 'numeric' }).format(nextStart);
+    return SUPABASE_API_.addPeriod({ name: newPeriodName || ('รอบเดือน ' + monthYear), startDate: nextStart, endDate: '', status: 'active' });
+  },
+  async deletePeriod(id) {
+    const { error } = await getSb().from('periods').delete().eq('id', id);
+    dbFail_(error, 'ลบไม่ได้ เนื่องจากมีรายการที่ผูกกับรอบบัญชีนี้อยู่');
+    return true;
+  },
+
+  async addTransaction(data) {
+    const periods = await dbAll_('periods');
+    const id = newId_();
+    const date = data.date ? new Date(data.date) : new Date();
+    const periodId = data.periodId || findPeriodIdForDate_(date, periods);
+    const { error } = await getSb().from('transactions').insert({
+      id, date: date.toISOString(), type: data.type, wallet_id: data.walletId, category_id: data.categoryId,
+      amount: Number(data.amount) || 0, note: data.note || '', period_id: periodId || null
+    });
+    dbFail_(error);
+    return id;
+  },
+  async updateTransaction(id, data) {
+    const periods = await dbAll_('periods');
+    const date = data.date ? new Date(data.date) : new Date();
+    const periodId = data.periodId || findPeriodIdForDate_(date, periods);
+    const { error } = await getSb().from('transactions').update({
+      date: date.toISOString(), type: data.type, wallet_id: data.walletId, category_id: data.categoryId,
+      amount: Number(data.amount) || 0, note: data.note || '', period_id: periodId || null
+    }).eq('id', id);
+    dbFail_(error);
+    return true;
+  },
+  async deleteTransaction(id) {
+    const { error } = await getSb().from('transactions').delete().eq('id', id);
+    dbFail_(error);
+    return true;
+  }
+};
+
+// ชื่อและรูปแบบผลลัพธ์เหมือน Code.gs ทุกประการ ส่วนอื่นของหน้าเว็บจึงไม่ต้องแก้
+async function callServer(fnName, ...args) {
+  const fn = SUPABASE_API_[fnName];
+  if (!fn) throw new Error('ไม่รู้จักคำสั่ง: ' + fnName);
+  return fn(...args);
+}
+/* ===== SUPABASE DATA LAYER END ===== */
 
 function showLoading(show) {
   document.getElementById('loadingVeil').classList.toggle('hidden', !show);
@@ -1101,13 +1514,70 @@ async function loadFreshDashboard() {
   }
 }
 
-async function init() {
-  bindNav();
-  bindGlobalHandlers();
-  // แสดงข้อมูลที่จำไว้จากครั้งก่อนทันที (ไม่ต้องรอเซิร์ฟเวอร์) แล้วค่อยอัปเดตเป็นข้อมูลล่าสุดเมื่อโหลดเสร็จ
+function showLogin(msg) {
+  document.getElementById('loginScreen').classList.add('open');
+  document.getElementById('loginError').textContent = msg || '';
+  showLoading(false);
+}
+function hideLogin() { document.getElementById('loginScreen').classList.remove('open'); }
+
+async function startApp(session) {
+  hideLogin();
+  const label = document.getElementById('userLabel');
+  if (label && session && session.user) label.textContent = 'ล็อกอินเป็น ' + session.user.email;
+  // แสดงข้อมูลที่จำไว้จากครั้งก่อนทันที แล้วค่อยอัปเดตเป็นข้อมูลล่าสุด
   const cached = loadDashCache();
   if (cached) { try { hydrateFromDashboard(cached); } catch (e) {} }
   await loadFreshDashboard();
+}
+
+function bindAuthUi() {
+  document.getElementById('loginForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const btn = document.getElementById('btnLogin');
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    btn.disabled = true; btn.textContent = 'กำลังเข้าสู่ระบบ...';
+    document.getElementById('loginError').textContent = '';
+    try {
+      const { data, error } = await getSb().auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      document.getElementById('loginPassword').value = '';
+      await startApp(data.session);
+    } catch (e) {
+      const m = (e && e.message) || '';
+      document.getElementById('loginError').textContent =
+        /invalid login/i.test(m) ? 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' : ('เข้าสู่ระบบไม่สำเร็จ: ' + m);
+    } finally {
+      btn.disabled = false; btn.textContent = 'เข้าสู่ระบบ';
+    }
+  });
+
+  document.getElementById('btnLogout').addEventListener('click', async () => {
+    try { await getSb().auth.signOut(); } catch (e) {}
+  });
+
+  try {
+    getSb().auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') {
+        try { localStorage.removeItem(DASH_CACHE_KEY); } catch (e) {}
+        showLogin('');
+      }
+    });
+  } catch (e) { /* ยังไม่ได้ตั้งค่า — init() จะแจ้งเตือนเอง */ }
+}
+
+async function init() {
+  bindNav();
+  bindGlobalHandlers();
+  try {
+    bindAuthUi();
+    const { data } = await getSb().auth.getSession();
+    if (data && data.session) await startApp(data.session);
+    else showLogin('');
+  } catch (e) {
+    showLogin((e && e.message) || 'เกิดข้อผิดพลาด');
+  }
 }
 
 /* ---------- navigation ---------- */
