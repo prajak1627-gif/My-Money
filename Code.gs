@@ -77,17 +77,29 @@ function include(filename) {
   return HtmlService.createHtmlOutputFromFile(filename).getContent();
 }
 
+let SS_CACHE_ = null;
 function getSS() {
-  return SpreadsheetApp.getActiveSpreadsheet();
+  // เรียก getActiveSpreadsheet ครั้งเดียวต่อการรัน 1 ครั้ง (เดิมเรียกซ้ำหลายสิบครั้ง)
+  if (!SS_CACHE_) SS_CACHE_ = SpreadsheetApp.getActiveSpreadsheet();
+  return SS_CACHE_;
 }
 
 /* ---------------------------------------------
  *  Sheet setup / seeding
  * -------------------------------------------- */
 function setupSheets() {
+  // ตรวจโครงสร้างชีตแค่ครั้งแรก แล้วจำไว้ 6 ชั่วโมง ไม่ต้องตรวจซ้ำทุกคำขอ (ช่วยลดเวลาตอบลงมาก)
+  let cache = null;
+  try {
+    cache = CacheService.getScriptCache();
+    if (cache.get('sheetsReady_v1')) return;
+  } catch (e) {}
+
   const ss = getSS();
   Object.keys(SHEET_HEADERS).forEach(name => ensureSheet_(ss, name, SHEET_HEADERS[name]));
   seedDefaultsIfEmpty_();
+
+  try { if (cache) cache.put('sheetsReady_v1', '1', 21600); } catch (e) {}
 }
 
 function ensureSheet_(ss, name, headers) {
@@ -634,4 +646,67 @@ function getWalletCategoryBreakdown(periodId) {
       categoryBreakdown
     };
   });
+}
+
+/* ---------------------------------------------
+ *  ส่งออกข้อมูลเดิมเป็นไฟล์ SQL เพื่อนำเข้า Supabase (รันครั้งเดียวจากหน้า Apps Script Editor)
+ *  เลือกฟังก์ชัน exportSupabaseSQL แล้วกด Run → ดูลิงก์ไฟล์ใน Execution log
+ * -------------------------------------------- */
+function exportSupabaseSQL() {
+  const q = v => (v === null || v === undefined || v === '') ? 'null' : "'" + String(v).replace(/'/g, "''") + "'";
+  const ts = v => {
+    if (!v) return 'now()';
+    const d = (v instanceof Date) ? v : new Date(v);
+    return isNaN(d.getTime()) ? 'now()' : "'" + d.toISOString() + "'";
+  };
+  const tsNullable = v => {
+    if (!v) return 'null';
+    const d = (v instanceof Date) ? v : new Date(v);
+    return isNaN(d.getTime()) ? 'null' : "'" + d.toISOString() + "'";
+  };
+  const num = v => { const x = Number(v); return isFinite(x) ? String(x) : '0'; };
+
+  const wallets = readSheet_(SHEET_NAMES.WALLETS);
+  const cats = readSheet_(SHEET_NAMES.CATEGORIES);
+  const periods = readSheet_(SHEET_NAMES.PERIODS);
+  const txs = readSheet_(SHEET_NAMES.TRANSACTIONS);
+
+  const walletIds = {}; wallets.forEach(w => (walletIds[String(w.ID)] = true));
+  const catIds = {}; cats.forEach(c => (catIds[String(c.ID)] = true));
+  const periodIds = {}; periods.forEach(p => (periodIds[String(p.ID)] = true));
+
+  const parts = [];
+  const insert = (table, cols, rows) => {
+    if (!rows.length) return;
+    parts.push('insert into public.' + table + ' (' + cols + ') values\n  ' + rows.join(',\n  ') + '\non conflict (id) do nothing;\n');
+  };
+
+  insert('wallets', 'id,name,icon,color,initial_balance,created_at',
+    wallets.map(w => '(' + [q(w.ID), q(w.Name), q(w.Icon || '💰'), q(w.Color || '#16302A'), num(w.InitialBalance), ts(w.CreatedAt)].join(',') + ')'));
+
+  insert('categories', 'id,name,type,icon,color,created_at',
+    cats.map(c => '(' + [q(c.ID), q(c.Name), q(String(c.Type).toLowerCase() === 'income' ? 'income' : 'expense'), q(c.Icon || '📁'), q(c.Color || '#8A8A82'), ts(c.CreatedAt)].join(',') + ')'));
+
+  insert('periods', 'id,name,start_date,end_date,status,created_at',
+    periods.map(p => '(' + [q(p.ID), q(p.Name), ts(p.StartDate), tsNullable(p.EndDate), q(String(p.Status).toLowerCase() === 'closed' ? 'closed' : 'active'), ts(p.CreatedAt)].join(',') + ')'));
+
+  let skipped = 0, clearedPeriod = 0;
+  const txRows = [];
+  txs.forEach(t => {
+    const type = String(t.Type).toLowerCase();
+    if ((type !== 'income' && type !== 'expense') || !walletIds[String(t.WalletID)] || !catIds[String(t.CategoryID)]) { skipped++; return; }
+    let periodId = String(t.PeriodID || '');
+    if (periodId && !periodIds[periodId]) { periodId = ''; clearedPeriod++; }
+    txRows.push('(' + [q(t.ID), ts(t.Date), q(type), q(t.WalletID), q(t.CategoryID), num(t.Amount), q(t.Note), q(periodId), ts(t.CreatedAt)].join(',') + ')');
+  });
+  insert('transactions', 'id,date,type,wallet_id,category_id,amount,note,period_id,created_at', txRows);
+
+  const sql = '-- ส่งออกจาก Google Sheets เมื่อ ' + new Date().toISOString() + '\n' + parts.join('\n');
+  const file = DriveApp.createFile('supabase-import.sql', sql, MimeType.PLAIN_TEXT);
+
+  const summary = 'กระเป๋า ' + wallets.length + ' | หมวดหมู่ ' + cats.length + ' | รอบบัญชี ' + periods.length +
+    ' | รายการ ' + txRows.length + ' (ข้ามเพราะข้อมูลไม่สมบูรณ์ ' + skipped + ', ตัดรอบบัญชีที่ไม่มีอยู่จริงออก ' + clearedPeriod + ')';
+  Logger.log(summary);
+  Logger.log('ไฟล์ SQL อยู่ที่: ' + file.getUrl());
+  return summary;
 }
